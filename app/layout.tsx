@@ -1,20 +1,30 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Instrument_Serif, Plus_Jakarta_Sans } from 'next/font/google'
+import { site } from '@/lib/site'
 import './globals.css'
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-jakarta' })
 const instrument = Instrument_Serif({ subsets: ['latin'], variable: '--font-instrument', weight: '400' })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: 'Luxa | Premium Websites for Growing Restaurants',
   description: 'Beautiful, fast websites for restaurants in Abuja, Lagos and Ilorin. Built for conversion with menus, WhatsApp ordering, reservations and Google visibility.',
-  generator: 'v0.app',
+  alternates: { canonical: '/' },
   openGraph: {
     title: 'Luxa | Websites for Growing Restaurants',
     description: 'Built for restaurants that are already growing.',
-    url: 'https://luxasolutions.com',
+    url: site.url,
+    siteName: site.legalName,
     type: 'website',
+    images: [{ url: '/apple-icon.png', width: 512, height: 512, alt: site.legalName }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Luxa | Websites for Growing Restaurants',
+    description: 'Built for restaurants that are already growing.',
+    images: ['/apple-icon.png'],
   },
   icons: {
     icon: [

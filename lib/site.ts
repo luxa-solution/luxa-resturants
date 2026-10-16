@@ -2,9 +2,9 @@ export const site = {
   name: 'Luxa',
   legalName: 'Luxa Web Studio',
   url: 'https://luxasolutions.com',
-  whatsapp: '',
-  email: '',
-  instagram: 'https://instagram.com/luxasolutions',
+  whatsapp: '2347047494586',
+  email: 'luxadigitalsolutions@gmail.com',
+  instagram: 'https://www.instagram.com/luxa.build/',
   cities: ['Abuja', 'Lagos', 'Ilorin'],
 } as const
 
@@ -14,7 +14,7 @@ export const navItems = [
   ['Why a website', '#why'], ['Work', '#work'], ['Process', '#process'], ['Packages', '#packages'], ['FAQ', '#faq'],
 ] as const
 
-export const waLink = (restaurant = '') => `https://wa.me/?text=${whatsappMessage(restaurant)}`
+export const waLink = (restaurant = '') => `https://wa.me/${site.whatsapp}?text=${whatsappMessage(restaurant)}`
 
 export type SiteConfig = typeof site
 
