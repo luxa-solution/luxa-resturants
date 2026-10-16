@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme inline {
+  --color-background: #100b08;
+  --color-foreground: #fff6e9;
+}
+
+@layer base {
+  * {
+    @apply border-white/10;
+  }
+  body {
+    @apply bg-[#100b08] text-[#fff6e9];
+  }
+  ::selection {
+    @apply bg-[#ff8a2a] text-[#180c07];
+  }
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/15 bg-white/[0.08] shadow-xl backdrop-blur-2xl;
+  }
+  .field {
+    @apply w-full rounded-2xl border border-white/15 bg-white/8 px-4 py-3 text-[#fff6e9] placeholder-[#9d8a7b] transition focus:border-orange-300 focus:bg-white/12 focus:outline-none;
+  }
+  .orb {
+    @apply pointer-events-none absolute rounded-full blur-[70px];
+  }
+  .shine {
+    @apply relative overflow-hidden;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.shine::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -80%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  animation: shine 4.5s ease-in-out infinite;
+}
+
+@keyframes shine {
+  to {
+    transform: translateX(140%);
+  }
+}
+
+@keyframes drift {
+  to {
+    transform: translate3d(22px, -18px, 0) scale(1.08);
+  }
+}
+
+.orb {
+  animation: drift 14s ease-in-out infinite alternate;
+  opacity: 0.38;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
