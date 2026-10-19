@@ -62,4 +62,27 @@ describe('audit form', () => {
     expect(screen.getByLabelText('Do you have a website?')).toBeInTheDocument()
     expect(screen.getByLabelText('Anything you want us to know? (optional)')).toBeInTheDocument()
   })
+
+  it('submits the selected city and website status', async () => {
+    const user = userEvent.setup()
+    render(<LuxaHome />)
+
+    await user.type(screen.getByPlaceholderText('Restaurant name'), 'Savour Lagos')
+    await user.type(screen.getByPlaceholderText('Your name'), 'Ada')
+    await user.type(screen.getByPlaceholderText('WhatsApp number (+234)'), '+2348012345678')
+
+    await user.click(screen.getByLabelText('City'))
+    await user.click(await screen.findByRole('option', { name: 'Lagos' }))
+    await user.click(screen.getByLabelText('Do you have a website?'))
+    await user.click(await screen.findByRole('option', { name: 'None' }))
+
+    await user.click(screen.getByRole('button', { name: /get my free website audit/i }))
+    expect(await screen.findByText('Audit request received.')).toBeInTheDocument()
+
+    const fetchMock = fetch as unknown as ReturnType<typeof vi.fn>
+    const [, init] = fetchMock.mock.calls[0]
+    const sent = JSON.parse((init as RequestInit).body as string)
+    expect(sent.city).toBe('Lagos')
+    expect(sent.hasWebsite).toBe('None')
+  })
 })

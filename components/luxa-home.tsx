@@ -1,55 +1,869 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import { track } from '@vercel/analytics'
-import { ArrowRight, Check, ChevronDown, Globe2, Menu, MessageCircle, MousePointer2, Smartphone, Sparkles, X, Zap } from 'lucide-react'
+import { ArrowRight, Check, ChevronDown, Menu, MessageCircle, Sparkles, X } from 'lucide-react'
 import { navItems, site, waLink } from '@/lib/site'
 import { projects } from '@/lib/projects'
 import { packages } from '@/lib/offerings'
 import { faqs } from '@/lib/faqs'
+import BrandSelect from '@/components/brand-select'
 
-const benefits = ['Beautiful digital menu', 'One-tap WhatsApp ordering', 'Table reservations', 'Being found on Google', 'Photo gallery & story', 'Catering & events enquiries', 'Delivery-app & Instagram links', 'Fast on any phone', 'Easy to update menu']
+const benefits = [
+  'Beautiful digital menu',
+  'One-tap WhatsApp ordering',
+  'Table reservations',
+  'Being found on Google',
+  'Photo gallery & story',
+  'Catering & events enquiries',
+  'Delivery-app & Instagram links',
+  'Fast on any phone',
+  'Easy to update menu',
+]
 
-function Button({ children, href = '#audit', secondary = false }: { children: React.ReactNode; href?: string; secondary?: boolean }) { return <a href={href} onClick={() => track(href.startsWith('https://wa.me') ? 'whatsapp_click' : 'audit_click')} className={`shine inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 ${secondary ? 'border border-white/20 bg-white/8 text-[#fff6e9]' : 'bg-gradient-to-r from-[#ffb347] to-[#ff7a1a] text-[#1a0e08] shadow-[0_10px_30px_rgba(255,122,26,.25)]'}`}>{children}</a> }
-function SectionTitle({ eyebrow, title, copy }: { eyebrow: string; title: React.ReactNode; copy?: string }) { return <div className="mx-auto max-w-2xl text-center"><p className="mb-3 text-xs font-bold uppercase tracking-[.24em] text-orange-300">{eyebrow}</p><h2 className="text-balance text-3xl font-semibold tracking-[-.04em] sm:text-5xl">{title}</h2>{copy && <p className="mt-5 text-pretty text-base leading-7 text-[#cbb9aa]">{copy}</p>}</div> }
-function Mockup() { return <div className="relative mx-auto w-full max-w-[390px] rotate-2 sm:ml-auto"><div className="absolute -left-8 top-24 rounded-2xl border border-white/20 bg-[#21150f]/80 px-3 py-2 text-xs shadow-xl backdrop-blur-xl sm:-left-16"><span className="text-emerald-300">+ Online orders</span></div><div className="absolute -right-5 top-44 rounded-2xl border border-white/20 bg-[#21150f]/80 px-3 py-2 text-xs shadow-xl backdrop-blur-xl sm:-right-14"><span className="text-orange-200">Found on Google</span></div><div className="rounded-[34px] border border-white/25 bg-black/30 p-2 shadow-2xl backdrop-blur-xl"><div className="overflow-hidden rounded-[27px] bg-[#f8eee1] text-[#2c1910]"><div className="h-7 bg-[#e9d6c1] px-4 py-2"><div className="h-1 w-12 rounded-full bg-[#6d4b37]/40" /></div><div className="p-5"><div className="flex items-center justify-between"><span className="text-lg font-bold tracking-tight">SAVOUR</span><span className="text-[10px] uppercase tracking-widest">Menu</span></div><div className="mt-10 rounded-3xl bg-gradient-to-br from-[#e16b2f] to-[#5d2418] p-5 text-white"><p className="text-xs uppercase tracking-widest text-orange-100">Tonight at Savour</p><p className="mt-2 text-3xl font-semibold leading-none">Good food.<br /><i className="font-serif font-normal">Good mood.</i></p><button className="mt-5 rounded-full bg-white px-3 py-2 text-xs font-semibold text-[#592116]">Order on WhatsApp</button></div><p className="mt-6 text-xs font-bold uppercase tracking-widest text-[#90684d]">Customer favourites</p><div className="mt-3 grid grid-cols-2 gap-3">{['Jollof & suya','Creamy pasta','Grilled prawns','Savour cake'].map((item, i) => <div key={item} className="rounded-2xl bg-white p-3 shadow-sm"><div className={`mb-3 h-16 rounded-xl ${['bg-[#e89a50]','bg-[#b76b3e]','bg-[#d78f77]','bg-[#c78e55]'][i]}`} /><p className="text-xs font-semibold">{item}</p><p className="mt-1 text-[10px] text-[#9c7b66]">From ₦8,500</p></div>)}</div></div></div></div></div> }
+const cityOptions = [
+  { label: 'Abuja', value: 'Abuja' },
+  { label: 'Lagos', value: 'Lagos' },
+  { label: 'Ilorin', value: 'Ilorin' },
+  { label: 'Other', value: 'Other' },
+]
 
-export default function LuxaHome() {
-  const [menu, setMenu] = useState(false); const [openFaq, setOpenFaq] = useState<number | null>(0); const [enquiries, setEnquiries] = useState(42); const [lost, setLost] = useState(35); const [order, setOrder] = useState(8500); const [sent, setSent] = useState(false); const [sending, setSending] = useState(false); const [error, setError] = useState('');
-  const estimate = useMemo(() => Math.round(enquiries * (lost / 100) * 4.3), [enquiries, lost]);
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setError(''); setSending(true);
-    const form = event.currentTarget; const data = new FormData(form);
-    const payload = { restaurant: data.get('restaurant'), name: data.get('name'), whatsapp: data.get('whatsapp'), instagram: data.get('instagram'), city: data.get('city'), hasWebsite: data.get('hasWebsite'), message: data.get('message'), company: data.get('company') };
-    try {
-      const res = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      const result = await res.json().catch(() => ({} as { ok?: boolean; error?: string }));
-      if (!res.ok || !result.ok) throw new Error(result.error || 'Request failed');
-      setSent(true); form.reset(); track('lead_submitted');
-    } catch {
-      setError('We couldn’t send your request. Please try again, or reach us on WhatsApp.');
-    } finally {
-      setSending(false);
-    }
-  }
-  return <main className="overflow-hidden">
-    <div className="fixed inset-x-0 top-3 z-50 px-4"><header className="glass mx-auto flex max-w-6xl items-center justify-between rounded-full px-4 py-3 sm:px-5"><Link href="/" className="text-xl font-bold tracking-[-.06em]">luxa<span className="text-orange-300">.</span></Link><nav className="hidden items-center gap-6 text-xs text-[#cbb9aa] lg:flex">{navItems.map(([label, href]) => <a key={href} className="transition hover:text-white" href={href}>{label}</a>)}</nav><div className="hidden items-center gap-3 sm:flex"><a href={waLink()} className="text-xs font-semibold text-[#f2d8bf]">Chat on WhatsApp</a><Button>Get My Free Website Audit</Button></div><button aria-label="Open menu" className="rounded-full p-2 sm:hidden" onClick={() => setMenu(!menu)}>{menu ? <X /> : <Menu />}</button></header>{menu && <div className="glass mx-auto mt-2 flex max-w-6xl flex-col gap-2 rounded-3xl p-4 sm:hidden">{navItems.map(([label, href]) => <a key={href} onClick={() => setMenu(false)} className="rounded-2xl px-4 py-3 text-sm hover:bg-white/10" href={href}>{label}</a>)}<Button>Get My Free Website Audit</Button></div>}</div>
-    <section className="relative min-h-[760px] bg-[radial-gradient(circle_at_82%_12%,#633219_0,transparent_28%),linear-gradient(135deg,#100b08,#1b100c)] px-5 pb-20 pt-36 sm:px-8 sm:pt-48"><div className="orb left-[10%] top-28 size-48 bg-orange-600" /><div className="orb right-[7%] top-20 size-64 bg-red-700" /><div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.05fr_.95fr]"><div className="reveal"><div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-200/20 bg-orange-200/8 px-3 py-2 text-xs text-orange-100"><Sparkles className="size-3.5 text-orange-300" /> Built for restaurants already growing</div><h1 className="max-w-3xl text-balance text-5xl font-semibold leading-[.96] tracking-[-.07em] sm:text-7xl">Your Instagram brings the hunger. <span className="serif text-gradient">Your website</span> brings the orders.</h1><p className="mt-7 max-w-xl text-pretty text-base leading-7 text-[#cbb9aa] sm:text-lg">We design and launch beautiful, fast websites for growing restaurants in Abuja, Lagos and Ilorin — with menus, WhatsApp ordering, reservations and Google visibility built in.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button>Get My Free Website Audit <ArrowRight className="size-4" /></Button><Button href={waLink()} secondary><MessageCircle className="size-4" /> Chat on WhatsApp</Button></div><div className="mt-10 flex flex-wrap gap-2 text-xs text-[#cbb9aa]"><span className="rounded-full border border-white/15 px-3 py-2">Abuja</span><span className="rounded-full border border-white/15 px-3 py-2">Lagos</span><span className="rounded-full border border-white/15 px-3 py-2">Ilorin</span><span className="self-center pl-2">Mostly mobile. Always memorable.</span></div></div><Mockup /></div></section>
-    <section id="why" className="bg-[#f7eddf] px-5 py-24 text-[#29170e] sm:px-8"><SectionTitle eyebrow="Sound familiar?" title={<>Your food is great. The journey to it feels <span className="serif text-[#d95f25]">messy.</span></>} copy="Your next customer should not have to hunt through a feed, open a PDF or ask for the menu twice." /><div className="mx-auto mt-14 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">{['Customers can only find you through Instagram DMs','Your menu lives in a PDF or a screenshot','Orders get lost between WhatsApp chats','Google shows competitors before you'].map((x,i)=><div key={x} className="rounded-3xl border border-[#3d2417]/10 bg-white/60 p-6"><div className="mb-10 flex size-10 items-center justify-center rounded-2xl bg-[#2d1a10] text-orange-200">0{i+1}</div><p className="text-lg font-semibold leading-snug">{x}</p><p className="mt-3 text-sm leading-6 text-[#765f50]">A better digital home makes the next step obvious.</p></div>)}</div></section>
-    <section className="bg-[#f7eddf] px-5 pb-24 text-[#29170e] sm:px-8"><div className="mx-auto grid max-w-6xl items-center gap-10 rounded-[2rem] bg-[#2c1a11] p-6 text-[#fff6e9] sm:p-10 lg:grid-cols-2"><div><p className="text-xs font-bold uppercase tracking-[.24em] text-orange-300">The shift</p><h2 className="mt-3 text-3xl font-semibold tracking-[-.04em] sm:text-5xl">From “send me the menu” to <span className="serif text-orange-300">“I’m on my way.”</span></h2><p className="mt-5 max-w-md leading-7 text-[#cbb9aa]">Give hungry people one fast, beautiful path from discovery to decision.</p></div><div className="relative grid grid-cols-2 gap-3"><div className="rounded-3xl border border-white/10 bg-black/20 p-5 opacity-55"><p className="text-xs text-[#cbb9aa]">Before</p><div className="mt-6 space-y-3"><div className="h-3 w-4/5 rounded bg-white/15"/><div className="h-3 w-full rounded bg-white/10"/><div className="h-16 rounded-2xl bg-white/10"/><div className="h-3 w-3/5 rounded bg-white/10"/></div></div><div className="-ml-6 mt-10 rounded-3xl border border-orange-200/30 bg-gradient-to-br from-[#ff9b3f]/30 to-[#4e2115] p-5 shadow-xl"><p className="text-xs text-orange-200">After</p><div className="mt-6 rounded-2xl bg-[#f7eddf] p-3 text-[#29170e]"><div className="h-20 rounded-xl bg-gradient-to-br from-[#dd713c] to-[#632718]"/><p className="mt-3 text-xs font-bold">Order from Savour</p><div className="mt-2 rounded-full bg-[#e8792b] py-2 text-center text-[10px] font-bold text-white">Order on WhatsApp</div></div></div></div></div></section>
-    <section className="bg-[#100b08] px-5 py-24 sm:px-8"><SectionTitle eyebrow="The website advantage" title={<>More than a menu. A <span className="serif text-gradient">better business day.</span></>} copy="Every detail is designed to help people decide faster and come back easier." /><div className="mx-auto mt-14 grid max-w-6xl gap-3 sm:grid-cols-2 lg:grid-cols-3">{benefits.map((x,i)=><div key={x} className={`glass rounded-3xl p-5 ${i===0?'sm:col-span-2 lg:col-span-1':''}`}><div className="mb-8 flex items-center justify-between"><div className="flex size-10 items-center justify-center rounded-2xl bg-orange-300/15 text-orange-300"><Check className="size-5" /></div><span className="text-xs text-white/35">0{i+1}</span></div><p className="font-medium">{x}</p></div>)}</div></section>
-    <section className="bg-[#1a100c] px-5 py-24 sm:px-8"><div className="mx-auto max-w-5xl rounded-[2rem] border border-orange-200/15 bg-gradient-to-br from-orange-300/10 to-transparent p-6 sm:p-10"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[.24em] text-orange-300">Revenue leak calculator</p><h2 className="mt-3 text-3xl font-semibold tracking-[-.04em] sm:text-4xl">What could be slipping through?</h2></div><p className="max-w-xs text-sm leading-6 text-[#cbb9aa]">A simple estimate to make the invisible visible.</p></div><div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr_.8fr]"><label className="text-sm text-[#cbb9aa]">Weekly enquiries <input aria-label="Weekly enquiries" type="range" min="10" max="150" value={enquiries} onChange={e=>setEnquiries(+e.target.value)} className="mt-4 w-full accent-orange-400"/><span className="mt-2 block text-2xl font-semibold text-white">{enquiries}</span></label><label className="text-sm text-[#cbb9aa]">Never convert <input aria-label="Never convert percent" type="range" min="10" max="80" value={lost} onChange={e=>setLost(+e.target.value)} className="mt-4 w-full accent-orange-400"/><span className="mt-2 block text-2xl font-semibold text-white">{lost}%</span></label><label className="text-sm text-[#cbb9aa]">Average order value <input aria-label="Average order value" type="number" value={order} onChange={e=>setOrder(+e.target.value)} className="mt-4 w-full rounded-xl border border-white/15 bg-white/8 px-3 py-3 text-white"/><span className="mt-2 block text-xs text-white/50">Illustrative estimate, not a guarantee</span></label></div><div className="mt-10 grid gap-4 border-t border-white/10 pt-8 sm:grid-cols-2"><div><p className="text-sm text-[#cbb9aa]">Estimated monthly missed orders</p><p className="mt-2 text-4xl font-semibold text-orange-200">{estimate}</p></div><div><p className="text-sm text-[#cbb9aa]">Estimated revenue left on table</p><p className="mt-2 text-4xl font-semibold text-orange-200">₦{(estimate*order).toLocaleString()}</p></div></div><div className="mt-8"><Button>Get My Free Website Audit <ArrowRight className="size-4" /></Button></div></div></section>
-    <section id="work" className="bg-[#f7eddf] px-5 py-24 text-[#29170e] sm:px-8"><SectionTitle eyebrow="Selected work" title={<>Different industries. Same obsession with <span className="serif text-[#d95f25]">clarity.</span></>} copy="A few recent builds — your restaurant is next." /><div className="mx-auto mt-14 grid max-w-6xl gap-5 md:grid-cols-2">{projects.map((project)=><Link href={`/projects/${project.slug}`} key={project.slug} className="group rounded-[2rem] border border-[#3d2417]/10 bg-white/65 p-3 transition hover:-translate-y-1"><div className="relative h-64 overflow-hidden rounded-[1.5rem]"><Image src={project.images[0]} alt={`${project.title} website preview`} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover object-top transition duration-500 group-hover:scale-105" /><div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/25 bg-black/45 p-4 text-white backdrop-blur-md"><p className="text-xs uppercase tracking-widest text-orange-200">{project.category}</p><p className="mt-2 text-xl font-semibold">{project.title}</p></div></div><div className="flex items-center justify-between p-4"><div><p className="font-medium">{project.summary}</p>{project.status && <span className="mt-2 inline-block text-xs text-[#a55d36]">{project.status}</span>}</div><ArrowRight className="size-5 transition group-hover:translate-x-1" /></div></Link>)}</div></section>
-    <section id="process" className="bg-[#100b08] px-5 py-24 sm:px-8"><SectionTitle eyebrow="How it works" title={<>A clear path from idea to <span className="serif text-gradient">launch.</span></>} /><div className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-4">{[['01','Free Audit','We look at your current digital journey and spot the highest-impact opportunities.'],['02','Design Preview','You see the direction before we build the full experience.'],['03','Build & Launch','A focused 7–14 day build window, depending on scope.'],['04','Grow','Support, updates and ideas as your restaurant keeps moving.']].map(([num,title,copy])=><div className="glass rounded-3xl p-5" key={num}><span className="text-sm text-orange-300">{num}</span><h3 className="mt-12 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-[#cbb9aa]">{copy}</p></div>)}</div></section>
-    <section id="packages" className="bg-[#f7eddf] px-5 py-24 text-[#29170e] sm:px-8"><SectionTitle eyebrow="Packages" title={<>Choose your restaurant’s next <span className="serif text-[#d95f25]">chapter.</span></>} copy="Clear starting points. We’ll shape the right scope during your free audit." /><div className="mx-auto mt-14 grid max-w-6xl gap-4 lg:grid-cols-3">{packages.map((pkg,i)=><div key={pkg.name} className={`rounded-[2rem] p-7 ${i===1?'bg-[#2c1a11] text-white shadow-2xl':'border border-[#3d2417]/10 bg-white/65'}`}><div className="flex items-center justify-between"><h3 className="text-xl font-semibold">{pkg.name}</h3>{pkg.popular&&<span className="rounded-full bg-orange-300 px-2 py-1 text-[10px] font-bold uppercase text-[#2c1a11]">Popular</span>}</div><p className={`mt-4 min-h-12 text-sm leading-6 ${i===1?'text-[#cbb9aa]':'text-[#765f50]'}`}>{pkg.blurb}</p><p className="mt-8 text-2xl font-semibold">{pkg.price}</p><ul className="mt-8 grid gap-3 text-sm">{pkg.features.map(f=><li key={f} className="flex items-center gap-2"><Check className="size-4 text-orange-500" />{f}</li>)}</ul><div className="mt-10"><Button secondary={i!==1}>Get My Free Website Audit</Button></div></div>)}</div></section>
-    <section id="faq" className="bg-[#100b08] px-5 py-24 sm:px-8"><SectionTitle eyebrow="Questions, answered" title={<>No jargon. Just <span className="serif text-gradient">clarity.</span></>} /><div className="mx-auto mt-12 max-w-3xl">{faqs.map(({question,answer},i)=><div key={question} className="border-b border-white/10"><button className="flex min-h-16 w-full items-center justify-between gap-4 text-left font-medium" onClick={()=>setOpenFaq(openFaq===i?null:i)} aria-expanded={openFaq===i}>{question}<ChevronDown className={`size-5 shrink-0 text-orange-300 transition ${openFaq===i?'rotate-180':''}`} /></button>{openFaq===i&&<p className="pb-5 pr-8 text-sm leading-6 text-[#cbb9aa]">{answer}</p>}</div>)}</div></section>
-    <section id="audit" className="bg-[radial-gradient(circle_at_20%_10%,#69321b,transparent_35%),#2b160e] px-5 py-24 sm:px-8"><div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center"><div><p className="text-xs font-bold uppercase tracking-[.24em] text-orange-300">Your next move</p><h2 className="mt-4 text-4xl font-semibold tracking-[-.05em] sm:text-6xl">Let’s put your restaurant on the map, <span className="serif text-gradient">properly.</span></h2><p className="mt-6 max-w-md leading-7 text-[#cbb9aa]">Tell us where things are today. We’ll show you what a stronger digital home could look like.</p></div><form className="glass rounded-[2rem] p-5 sm:p-8" onSubmit={handleSubmit}>{sent ? <div className="flex min-h-80 flex-col items-center justify-center text-center"><div className="flex size-14 items-center justify-center rounded-full bg-emerald-300/15 text-emerald-300"><Check /></div><h3 className="mt-5 text-2xl font-semibold">Audit request received.</h3><p className="mt-2 text-sm text-[#cbb9aa]">We’ll be in touch shortly. Prefer WhatsApp?</p><a className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-5 py-3 text-sm font-bold text-[#102016]" href={waLink()}><MessageCircle className="size-4" /> Continue on WhatsApp</a></div> : <><div className="grid gap-4 sm:grid-cols-2"><input name="restaurant" aria-label="Restaurant name" required placeholder="Restaurant name" className="field"/><input name="name" aria-label="Your name" required placeholder="Your name" className="field"/><input name="whatsapp" aria-label="WhatsApp number" required placeholder="WhatsApp number (+234)" className="field"/><input name="instagram" aria-label="Instagram handle" placeholder="Instagram handle" className="field"/><select name="city" aria-label="City" className="field"><option>City</option><option>Abuja</option><option>Lagos</option><option>Ilorin</option><option>Other</option></select><select name="hasWebsite" aria-label="Do you have a website?" className="field"><option>Do you have a website?</option><option>None</option><option>Outdated</option><option>Not mobile-friendly</option><option>It&apos;s fine</option></select><input name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 opacity-0" /></div><textarea name="message" aria-label="Anything you want us to know? (optional)" placeholder="Anything you want us to know? (optional)" className="field mt-4 min-h-28 w-full"/>{error && <p role="alert" className="mt-4 rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}<button type="submit" disabled={sending} className="shine mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ff7a1a] px-5 py-3 text-sm font-semibold text-[#1a0e08] disabled:opacity-60">{sending ? 'Sending…' : <>Get My Free Website Audit <ArrowRight className="size-4" /></>}</button><p className="mt-3 text-xs text-white/45">No pressure. No hard sell. Just useful ideas. By requesting an audit you agree to our <Link href="/privacy" className="underline hover:text-white">privacy policy</Link>.</p></>}</form></div></section>
-    <footer className="border-t border-white/10 bg-[#100b08] px-5 py-10 sm:px-8"><div className="mx-auto flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"><div><Link href="/" className="text-xl font-bold tracking-[-.06em]">luxa<span className="text-orange-300">.</span></Link><p className="mt-2 text-sm text-[#cbb9aa]">Websites for restaurants that are already growing.</p></div><div className="flex flex-wrap gap-4 text-xs text-[#cbb9aa]"><a href={site.instagram}>Instagram</a><a href={waLink()}>WhatsApp</a><a href={`mailto:${site.email}`}>Email</a><Link href="/privacy">Privacy</Link><span>© 2026 {site.legalName}</span></div></div></footer>
-    <div className="fixed inset-x-4 bottom-4 z-40 sm:hidden"><Button>Get My Free Website Audit <ArrowRight className="size-4" /></Button></div>
-  </main>
+const websiteOptions = [
+  { label: 'None', value: 'None' },
+  { label: 'Outdated', value: 'Outdated' },
+  { label: 'Not mobile-friendly', value: 'Not mobile-friendly' },
+  { label: "It's fine", value: "It's fine" },
+]
+
+const backgroundImages = [
+  '/images/restaurant-interior.webp',
+  '/images/restaurant-food.webp',
+  '/images/restaurant-dining.webp',
+]
+
+function Button({
+  children,
+  href = '#audit',
+  secondary = false,
+}: {
+  children: React.ReactNode
+  href?: string
+  secondary?: boolean
+}) {
+  return (
+    <a
+      href={href}
+      onClick={() => track(href.startsWith('https://wa.me') ? 'whatsapp_click' : 'audit_click')}
+      className={`shine inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 ${secondary ? 'border border-white/20 bg-white/8 text-[#fff6e9]' : 'bg-gradient-to-r from-[#ffb347] to-[#ff7a1a] text-[#1a0e08] shadow-[0_10px_30px_rgba(255,122,26,.25)]'}`}
+    >
+      {children}
+    </a>
+  )
 }
 
+function SectionTitle({
+  eyebrow,
+  title,
+  copy,
+}: {
+  eyebrow: string
+  title: React.ReactNode
+  copy?: string
+}) {
+  return (
+    <div className="mx-auto max-w-2xl text-center">
+      <p className="mb-3 text-xs font-bold uppercase tracking-[.24em] text-orange-300">{eyebrow}</p>
+      <h2 className="text-balance text-3xl font-semibold tracking-[-.04em] sm:text-5xl">{title}</h2>
+      {copy && <p className="mt-5 text-pretty text-base leading-7 text-[#cbb9aa]">{copy}</p>}
+    </div>
+  )
+}
 
+function Mockup() {
+  return (
+    <div className="relative mx-auto w-full max-w-[390px] rotate-2 sm:ml-auto">
+      <div className="absolute -left-8 top-24 rounded-2xl border border-white/20 bg-[#21150f]/80 px-3 py-2 text-xs shadow-xl backdrop-blur-xl sm:-left-16">
+        <span className="text-emerald-300">+ Online orders</span>
+      </div>
+      <div className="absolute -right-5 top-44 rounded-2xl border border-white/20 bg-[#21150f]/80 px-3 py-2 text-xs shadow-xl backdrop-blur-xl sm:-right-14">
+        <span className="text-orange-200">Found on Google</span>
+      </div>
+      <div className="rounded-[34px] border border-white/25 bg-black/30 p-2 shadow-2xl backdrop-blur-xl">
+        <div className="overflow-hidden rounded-[27px] bg-[#f8eee1] text-[#2c1910]">
+          <div className="h-7 bg-[#e9d6c1] px-4 py-2">
+            <div className="h-1 w-12 rounded-full bg-[#6d4b37]/40" />
+          </div>
+          <div className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold tracking-tight">SAVOUR</span>
+              <span className="text-[10px] uppercase tracking-widest">Menu</span>
+            </div>
+            <div className="mt-10 rounded-3xl bg-gradient-to-br from-[#e16b2f] to-[#5d2418] p-5 text-white">
+              <p className="text-xs uppercase tracking-widest text-orange-100">Tonight at Savour</p>
+              <p className="mt-2 text-3xl font-semibold leading-none">
+                Good food.
+                <br />
+                <i className="font-serif font-normal">Good mood.</i>
+              </p>
+              <button className="mt-5 rounded-full bg-white px-3 py-2 text-xs font-semibold text-[#592116]">
+                Order on WhatsApp
+              </button>
+            </div>
+            <p className="mt-6 text-xs font-bold uppercase tracking-widest text-[#90684d]">
+              Customer favourites
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              {['Jollof & suya', 'Creamy pasta', 'Grilled prawns', 'Savour cake'].map((item, i) => (
+                <div key={item} className="rounded-2xl bg-white p-3 shadow-sm">
+                  <div
+                    className={`mb-3 h-16 rounded-xl ${['bg-[#e89a50]', 'bg-[#b76b3e]', 'bg-[#d78f77]', 'bg-[#c78e55]'][i]}`}
+                  />
+                  <p className="text-xs font-semibold">{item}</p>
+                  <p className="mt-1 text-[10px] text-[#9c7b66]">From ₦8,500</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function LuxaHome() {
+  const [menu, setMenu] = useState(false)
+  const [openFaq, setOpenFaq] = useState<number | null>(0)
+  const [enquiries, setEnquiries] = useState(42)
+  const [lost, setLost] = useState(35)
+  const [order, setOrder] = useState(8500)
+  const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const [navTheme, setNavTheme] = useState<'light' | 'dark'>('dark')
+  const estimate = useMemo(() => Math.round(enquiries * (lost / 100) * 4.3), [enquiries, lost])
+
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-theme]'))
+    const updateTheme = () => {
+      let next: 'light' | 'dark' = 'dark'
+      for (const section of sections) {
+        const rect = section.getBoundingClientRect()
+        if (rect.top <= 88 && rect.bottom > 88) {
+          next = section.dataset.navTheme === 'light' ? 'light' : 'dark'
+          break
+        }
+      }
+      setNavTheme((current) => (current === next ? current : next))
+    }
+
+    updateTheme()
+    window.addEventListener('scroll', updateTheme, { passive: true })
+    window.addEventListener('resize', updateTheme)
+    return () => {
+      window.removeEventListener('scroll', updateTheme)
+      window.removeEventListener('resize', updateTheme)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!menu) return
+    const bodyOverflow = document.body.style.overflow
+    const htmlOverflow = document.documentElement.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenu(false)
+    }
+    const onResize = () => {
+      if (window.innerWidth >= 1024) setMenu(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('resize', onResize)
+    return () => {
+      document.body.style.overflow = bodyOverflow
+      document.documentElement.style.overflow = htmlOverflow
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [menu])
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError('')
+    setSending(true)
+    const form = event.currentTarget
+    const data = new FormData(form)
+    const payload = {
+      restaurant: data.get('restaurant'),
+      name: data.get('name'),
+      whatsapp: data.get('whatsapp'),
+      instagram: data.get('instagram'),
+      city: data.get('city'),
+      hasWebsite: data.get('hasWebsite'),
+      message: data.get('message'),
+      company: data.get('company'),
+    }
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const result = await res.json().catch(() => ({} as { ok?: boolean; error?: string }))
+      if (!res.ok || !result.ok) throw new Error(result.error || 'Request failed')
+      setSent(true)
+      form.reset()
+      track('lead_submitted')
+    } catch {
+      setError('We couldn’t send your request. Please try again, or reach us on WhatsApp.')
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const lightNav = navTheme === 'light'
+  const navLinkClass = lightNav
+    ? 'text-[#5f4a3c] hover:text-[#29170e]'
+    : 'text-[#cbb9aa] hover:text-white'
+  const panelClass = lightNav
+    ? 'border-[#3d2417]/15 bg-[#f7eddf]/92 text-[#29170e] shadow-[0_12px_40px_rgba(41,23,14,0.16)]'
+    : 'border-white/15 bg-[#100b08]/80 text-[#fff6e9] shadow-[0_12px_40px_rgba(0,0,0,0.35)]'
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <main className="overflow-hidden">
+        <AnimatePresence>
+          {menu && (
+            <motion.button
+              key="menu-backdrop"
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setMenu(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40 cursor-default bg-[#0b0705]/45 backdrop-blur-sm"
+            />
+          )}
+        </AnimatePresence>
+
+        <div className="fixed inset-x-0 top-3 z-50 px-4">
+          <header
+            className={`mx-auto flex max-w-6xl items-center justify-between rounded-full border px-4 py-3 backdrop-blur-2xl transition-colors duration-300 sm:px-5 ${panelClass}`}
+          >
+            <Link href="/" className="text-xl font-bold tracking-[-.06em]">
+              luxa
+              <span className={lightNav ? 'text-orange-500' : 'text-orange-300'}>.</span>
+            </Link>
+            <nav className="hidden items-center gap-6 text-xs lg:flex">
+              {navItems.map(([label, href]) => (
+                <a key={href} className={`transition-colors duration-300 ${navLinkClass}`} href={href}>
+                  {label}
+                </a>
+              ))}
+            </nav>
+            <div className="hidden items-center gap-3 sm:flex">
+              <a
+                href={waLink()}
+                className={`text-xs font-semibold transition-colors duration-300 ${
+                  lightNav ? 'text-[#8a4a25] hover:text-[#29170e]' : 'text-[#f2d8bf] hover:text-white'
+                }`}
+              >
+                Chat on WhatsApp
+              </a>
+              <Button>Get My Free Website Audit</Button>
+            </div>
+            <button
+              aria-label={menu ? 'Close menu' : 'Open menu'}
+              aria-expanded={menu}
+              aria-controls="mobile-menu"
+              className="-mr-1 rounded-full p-2 lg:hidden"
+              onClick={() => setMenu(!menu)}
+            >
+              {menu ? <X /> : <Menu />}
+            </button>
+          </header>
+
+          <AnimatePresence>
+            {menu && (
+              <motion.div
+                id="mobile-menu"
+                key="mobile-menu"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                className="mx-auto mt-2 max-h-[calc(100dvh-6.5rem)] max-w-6xl overflow-y-auto overscroll-contain rounded-3xl border border-white/12 bg-[#140d09]/95 p-4 text-[#fff6e9] shadow-2xl backdrop-blur-2xl lg:hidden"
+              >
+                {navItems.map(([label, href]) => (
+                  <a
+                    key={href}
+                    onClick={() => setMenu(false)}
+                    className="block rounded-2xl px-4 py-3 text-sm transition hover:bg-white/10"
+                    href={href}
+                  >
+                    {label}
+                  </a>
+                ))}
+                <div className="mt-2">
+                  <Button>Get My Free Website Audit</Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <section
+          data-nav-theme="dark"
+          className="relative min-h-[760px] bg-[radial-gradient(circle_at_82%_12%,#633219_0,transparent_28%),linear-gradient(135deg,#100b08,#1b100c)] px-5 pb-20 pt-36 sm:px-8 sm:pt-48"
+        >
+          <div className="orb left-[10%] top-28 size-48 bg-orange-600" />
+          <div className="orb right-[7%] top-20 size-64 bg-red-700" />
+          <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
+            <div>
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-200/20 bg-orange-200/8 px-3 py-2 text-xs text-orange-100">
+                <Sparkles className="size-3.5 text-orange-300" /> Built for restaurants already growing
+              </div>
+              <h1 className="max-w-3xl text-balance text-5xl font-semibold leading-[.96] tracking-[-.07em] sm:text-7xl">
+                Your Instagram brings the hunger. <span className="serif text-gradient">Your website</span>{' '}
+                brings the orders.
+              </h1>
+              <p className="mt-7 max-w-xl text-pretty text-base leading-7 text-[#cbb9aa] sm:text-lg">
+                We design and launch beautiful, fast websites for growing restaurants in Abuja, Lagos and
+                Ilorin — with menus, WhatsApp ordering, reservations and Google visibility built in.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button>
+                  Get My Free Website Audit <ArrowRight className="size-4" />
+                </Button>
+                <Button href={waLink()} secondary>
+                  <MessageCircle className="size-4" /> Chat on WhatsApp
+                </Button>
+              </div>
+              <div className="mt-10 flex flex-wrap gap-2 text-xs text-[#cbb9aa]">
+                <span className="rounded-full border border-white/15 px-3 py-2">Abuja</span>
+                <span className="rounded-full border border-white/15 px-3 py-2">Lagos</span>
+                <span className="rounded-full border border-white/15 px-3 py-2">Ilorin</span>
+                <span className="self-center pl-2">Mostly mobile. Always memorable.</span>
+              </div>
+            </div>
+            <Mockup />
+          </div>
+        </section>
+
+        <section
+          id="why"
+          data-nav-theme="light"
+          className="bg-[#f7eddf] px-5 py-24 text-[#29170e] sm:px-8"
+        >
+          <SectionTitle
+            eyebrow="Sound familiar?"
+            title={
+              <>
+                Your food is great. The journey to it feels <span className="serif text-[#d95f25]">messy.</span>
+              </>
+            }
+            copy="Your next customer should not have to hunt through a feed, open a PDF or ask for the menu twice."
+          />
+          <div className="mx-auto mt-14 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              'Customers can only find you through Instagram DMs',
+              'Your menu lives in a PDF or a screenshot',
+              'Orders get lost between WhatsApp chats',
+              'Google shows competitors before you',
+            ].map((x, i) => (
+              <div key={x} className="rounded-3xl border border-[#3d2417]/10 bg-white/60 p-6">
+                <div className="mb-10 flex size-10 items-center justify-center rounded-2xl bg-[#2d1a10] text-orange-200">
+                  0{i + 1}
+                </div>
+                <p className="text-lg font-semibold leading-snug">{x}</p>
+                <p className="mt-3 text-sm leading-6 text-[#765f50]">
+                  A better digital home makes the next step obvious.
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          data-nav-theme="light"
+          className="bg-[#f7eddf] px-5 pb-24 text-[#29170e] sm:px-8"
+        >
+          <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-[2rem] bg-[#2c1a11] p-6 text-[#fff6e9] sm:p-10 lg:grid-cols-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[.24em] text-orange-300">The shift</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-.04em] sm:text-5xl">
+                From “send me the menu” to <span className="serif text-orange-300">“I’m on my way.”</span>
+              </h2>
+              <p className="mt-5 max-w-md leading-7 text-[#cbb9aa]">
+                Give hungry people one fast, beautiful path from discovery to decision.
+              </p>
+            </div>
+            <div className="relative grid grid-cols-2 gap-3">
+              <div className="rounded-3xl border border-white/10 bg-black/20 p-5 opacity-55">
+                <p className="text-xs text-[#cbb9aa]">Before</p>
+                <div className="mt-6 space-y-3">
+                  <div className="h-3 w-4/5 rounded bg-white/15" />
+                  <div className="h-3 w-full rounded bg-white/10" />
+                  <div className="h-16 rounded-2xl bg-white/10" />
+                  <div className="h-3 w-3/5 rounded bg-white/10" />
+                </div>
+              </div>
+              <div className="-ml-6 mt-10 rounded-3xl border border-orange-200/30 bg-gradient-to-br from-[#ff9b3f]/30 to-[#4e2115] p-5 shadow-xl">
+                <p className="text-xs text-orange-200">After</p>
+                <div className="mt-6 rounded-2xl bg-[#f7eddf] p-3 text-[#29170e]">
+                  <div className="h-20 rounded-xl bg-gradient-to-br from-[#dd713c] to-[#632718]" />
+                  <p className="mt-3 text-xs font-bold">Order from Savour</p>
+                  <div className="mt-2 rounded-full bg-[#e8792b] py-2 text-center text-[10px] font-bold text-white">
+                    Order on WhatsApp
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          data-nav-theme="dark"
+          className="relative isolate overflow-hidden bg-[#100b08] px-5 py-24 sm:px-8"
+        >
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="absolute inset-0 grid grid-cols-3">
+              {backgroundImages.map((src) => (
+                <div key={src} className="relative">
+                  <Image
+                    src={src}
+                    alt=""
+                    fill
+                    sizes="33vw"
+                    className="object-cover opacity-60 saturate-75"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 bg-[#100b08]/70" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(255,138,42,.14),transparent_45%)]" />
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#100b08] to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#100b08] to-transparent" />
+          </div>
+          <SectionTitle
+            eyebrow="The website advantage"
+            title={
+              <>
+                More than a menu. A <span className="serif text-gradient">better business day.</span>
+              </>
+            }
+            copy="Every detail is designed to help people decide faster and come back easier."
+          />
+          <div className="mx-auto mt-14 grid max-w-6xl gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {benefits.map((x, i) => (
+              <div
+                key={x}
+                className={`group rounded-3xl border border-white/10 bg-[#150d09]/75 p-5 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-orange-200/25 hover:bg-[#1b110c]/85 ${i === 0 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+              >
+                <div className="mb-8 flex items-center justify-between">
+                  <div className="flex size-10 items-center justify-center rounded-2xl bg-orange-300/15 text-orange-300">
+                    <Check className="size-5" />
+                  </div>
+                  <span className="text-xs text-white/35">0{i + 1}</span>
+                </div>
+                <p className="font-medium">{x}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section data-nav-theme="dark" className="bg-[#1a100c] px-5 py-24 sm:px-8">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-orange-200/15 bg-gradient-to-br from-orange-300/10 to-transparent p-6 sm:p-10">
+            <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[.24em] text-orange-300">
+                  Revenue leak calculator
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[-.04em] sm:text-4xl">
+                  What could be slipping through?
+                </h2>
+              </div>
+              <p className="max-w-xs text-sm leading-6 text-[#cbb9aa]">
+                A simple estimate to make the invisible visible.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr_.8fr]">
+              <label className="text-sm text-[#cbb9aa]">
+                Weekly enquiries
+                <input
+                  aria-label="Weekly enquiries"
+                  type="range"
+                  min="10"
+                  max="150"
+                  value={enquiries}
+                  onChange={(e) => setEnquiries(+e.target.value)}
+                  className="mt-4 w-full accent-orange-400"
+                />
+                <span className="mt-2 block text-2xl font-semibold text-white">{enquiries}</span>
+              </label>
+              <label className="text-sm text-[#cbb9aa]">
+                Never convert
+                <input
+                  aria-label="Never convert percent"
+                  type="range"
+                  min="10"
+                  max="80"
+                  value={lost}
+                  onChange={(e) => setLost(+e.target.value)}
+                  className="mt-4 w-full accent-orange-400"
+                />
+                <span className="mt-2 block text-2xl font-semibold text-white">{lost}%</span>
+              </label>
+              <label className="text-sm text-[#cbb9aa]">
+                Average order value
+                <input
+                  aria-label="Average order value"
+                  type="number"
+                  value={order}
+                  onChange={(e) => setOrder(+e.target.value)}
+                  className="mt-4 w-full rounded-xl border border-white/15 bg-white/8 px-3 py-3 text-white"
+                />
+                <span className="mt-2 block text-xs text-white/50">Illustrative estimate, not a guarantee</span>
+              </label>
+            </div>
+            <div className="mt-10 grid gap-4 border-t border-white/10 pt-8 sm:grid-cols-2">
+              <div>
+                <p className="text-sm text-[#cbb9aa]">Estimated monthly missed orders</p>
+                <p className="mt-2 text-4xl font-semibold text-orange-200">{estimate}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#cbb9aa]">Estimated revenue left on table</p>
+                <p className="mt-2 text-4xl font-semibold text-orange-200">
+                  ₦{(estimate * order).toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <Button>
+                Get My Free Website Audit <ArrowRight className="size-4" />
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="work"
+          data-nav-theme="light"
+          className="bg-[#f7eddf] px-5 py-24 text-[#29170e] sm:px-8"
+        >
+          <SectionTitle
+            eyebrow="Selected work"
+            title={
+              <>
+                Different industries. Same obsession with{' '}
+                <span className="serif text-[#d95f25]">clarity.</span>
+              </>
+            }
+            copy="A few recent builds — your restaurant is next."
+          />
+          <div className="mx-auto mt-14 grid max-w-6xl gap-5 md:grid-cols-2">
+            {projects.map((project) => (
+              <Link
+                href={`/projects/${project.slug}`}
+                key={project.slug}
+                className="group rounded-[2rem] border border-[#3d2417]/10 bg-white/65 p-3 transition hover:-translate-y-1"
+              >
+                <div className="relative h-64 overflow-hidden rounded-[1.5rem]">
+                  <Image
+                    src={project.images[0]}
+                    alt={`${project.title} website preview`}
+                    fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="object-cover object-top transition duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/20 bg-[#100b08]/80 p-4 text-white shadow-lg backdrop-blur-md">
+                    <p className="text-xs uppercase tracking-widest text-orange-300">{project.category}</p>
+                    <p className="mt-2 text-xl font-semibold">{project.title}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between p-4">
+                  <div>
+                    <p className="font-medium">{project.summary}</p>
+                    {project.status && (
+                      <span className="mt-2 inline-block text-xs text-[#a55d36]">{project.status}</span>
+                    )}
+                  </div>
+                  <ArrowRight className="size-5 transition group-hover:translate-x-1" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section id="process" data-nav-theme="dark" className="bg-[#100b08] px-5 py-24 sm:px-8">
+          <SectionTitle
+            eyebrow="How it works"
+            title={
+              <>
+                A clear path from idea to <span className="serif text-gradient">launch.</span>
+              </>
+            }
+          />
+          <div className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-4">
+            {[
+              [
+                '01',
+                'Free Audit',
+                'We look at your current digital journey and spot the highest-impact opportunities.',
+              ],
+              ['02', 'Design Preview', 'You see the direction before we build the full experience.'],
+              ['03', 'Build & Launch', 'A focused 7–14 day build window, depending on scope.'],
+              ['04', 'Grow', 'Support, updates and ideas as your restaurant keeps moving.'],
+            ].map(([num, title, copy]) => (
+              <div className="glass rounded-3xl p-5" key={num}>
+                <span className="text-sm text-orange-300">{num}</span>
+                <h3 className="mt-12 text-xl font-semibold">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#cbb9aa]">{copy}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="packages"
+          data-nav-theme="light"
+          className="bg-[#f7eddf] px-5 py-24 text-[#29170e] sm:px-8"
+        >
+          <SectionTitle
+            eyebrow="Packages"
+            title={
+              <>
+                Choose your restaurant’s next <span className="serif text-[#d95f25]">chapter.</span>
+              </>
+            }
+            copy="Clear starting points. We’ll shape the right scope during your free audit."
+          />
+          <div className="mx-auto mt-14 grid max-w-6xl gap-4 lg:grid-cols-3">
+            {packages.map((pkg, i) => (
+              <div
+                key={pkg.name}
+                className={`rounded-[2rem] p-7 ${i === 1 ? 'bg-[#2c1a11] text-white shadow-2xl' : 'border border-[#3d2417]/10 bg-white/65'}`}
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-semibold">{pkg.name}</h3>
+                  {pkg.popular && (
+                    <span className="rounded-full bg-orange-300 px-2 py-1 text-[10px] font-bold uppercase text-[#2c1a11]">
+                      Popular
+                    </span>
+                  )}
+                </div>
+                <p className={`mt-4 min-h-12 text-sm leading-6 ${i === 1 ? 'text-[#cbb9aa]' : 'text-[#765f50]'}`}>
+                  {pkg.blurb}
+                </p>
+                <p className="mt-8 text-2xl font-semibold">{pkg.price}</p>
+                <ul className="mt-8 grid gap-3 text-sm">
+                  {pkg.features.map((f) => (
+                    <li key={f} className="flex items-center gap-2">
+                      <Check className="size-4 text-orange-500" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-10">
+                  <Button secondary={i !== 1}>Get My Free Website Audit</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="faq" data-nav-theme="dark" className="bg-[#100b08] px-5 py-24 sm:px-8">
+          <SectionTitle
+            eyebrow="Questions, answered"
+            title={
+              <>
+                No jargon. Just <span className="serif text-gradient">clarity.</span>
+              </>
+            }
+          />
+          <div className="mx-auto mt-12 max-w-3xl">
+            {faqs.map(({ question, answer }, i) => (
+              <div key={question} className="border-b border-white/10">
+                <button
+                  className="flex min-h-16 w-full items-center justify-between gap-4 text-left font-medium"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  aria-expanded={openFaq === i}
+                >
+                  {question}
+                  <ChevronDown
+                    className={`size-5 shrink-0 text-orange-300 transition ${openFaq === i ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {openFaq === i && (
+                    <motion.div
+                      key="answer"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.22, ease: 'easeOut' }}
+                      className="overflow-hidden"
+                    >
+                      <p className="pb-5 pr-8 text-sm leading-6 text-[#cbb9aa]">{answer}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="audit"
+          data-nav-theme="dark"
+          className="bg-[radial-gradient(circle_at_20%_10%,#69321b,transparent_35%),#2b160e] px-5 py-24 sm:px-8"
+        >
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <p className="text-xs font-bold uppercase tracking-[.24em] text-orange-300">Your next move</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-.05em] sm:text-6xl">
+                Let’s put your restaurant on the map,{' '}
+                <span className="serif text-gradient">properly.</span>
+              </h2>
+              <p className="mt-6 max-w-md leading-7 text-[#cbb9aa]">
+                Tell us where things are today. We’ll show you what a stronger digital home could look like.
+              </p>
+            </motion.div>
+            <motion.form
+              className="glass rounded-[2rem] p-5 sm:p-8"
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.5, delay: 0.08, ease: 'easeOut' }}
+            >
+              {sent ? (
+                <div className="flex min-h-80 flex-col items-center justify-center text-center">
+                  <div className="flex size-14 items-center justify-center rounded-full bg-emerald-300/15 text-emerald-300">
+                    <Check />
+                  </div>
+                  <h3 className="mt-5 text-2xl font-semibold">Audit request received.</h3>
+                  <p className="mt-2 text-sm text-[#cbb9aa]">We’ll be in touch shortly. Prefer WhatsApp?</p>
+                  <a
+                    className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-5 py-3 text-sm font-bold text-[#102016]"
+                    href={waLink()}
+                  >
+                    <MessageCircle className="size-4" /> Continue on WhatsApp
+                  </a>
+                </div>
+              ) : (
+                <>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <input
+                      name="restaurant"
+                      aria-label="Restaurant name"
+                      required
+                      placeholder="Restaurant name"
+                      className="field"
+                    />
+                    <input name="name" aria-label="Your name" required placeholder="Your name" className="field" />
+                    <input
+                      name="whatsapp"
+                      aria-label="WhatsApp number"
+                      required
+                      placeholder="WhatsApp number (+234)"
+                      className="field"
+                    />
+                    <input
+                      name="instagram"
+                      aria-label="Instagram handle"
+                      placeholder="Instagram handle"
+                      className="field"
+                    />
+                    <BrandSelect label="City" name="city" placeholder="City" options={cityOptions} />
+                    <BrandSelect
+                      label="Do you have a website?"
+                      name="hasWebsite"
+                      placeholder="Do you have a website?"
+                      options={websiteOptions}
+                    />
+                    <input
+                      name="company"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      className="absolute left-[-9999px] h-0 w-0 opacity-0"
+                    />
+                  </div>
+                  <textarea
+                    name="message"
+                    aria-label="Anything you want us to know? (optional)"
+                    placeholder="Anything you want us to know? (optional)"
+                    className="field mt-4 min-h-28 w-full"
+                  />
+                  {error && (
+                    <p
+                      role="alert"
+                      className="mt-4 rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+                    >
+                      {error}
+                    </p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="shine mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ff7a1a] px-5 py-3 text-sm font-semibold text-[#1a0e08] disabled:opacity-60"
+                  >
+                    {sending ? (
+                      'Sending…'
+                    ) : (
+                      <>
+                        Get My Free Website Audit <ArrowRight className="size-4" />
+                      </>
+                    )}
+                  </button>
+                  <p className="mt-3 text-xs text-white/45">
+                    No pressure. No hard sell. Just useful ideas. By requesting an audit you agree to our{' '}
+                    <Link href="/privacy" className="underline hover:text-white">
+                      privacy policy
+                    </Link>
+                    .
+                  </p>
+                </>
+              )}
+            </motion.form>
+          </div>
+        </section>
+
+        <footer className="border-t border-white/10 bg-[#100b08] px-5 py-10 sm:px-8">
+          <div className="mx-auto flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <Link href="/" className="text-xl font-bold tracking-[-.06em]">
+                luxa<span className="text-orange-300">.</span>
+              </Link>
+              <p className="mt-2 text-sm text-[#cbb9aa]">Websites for restaurants that are already growing.</p>
+            </div>
+            <div className="flex flex-wrap gap-4 text-xs text-[#cbb9aa]">
+              <a href={site.instagram}>Instagram</a>
+              <a href={waLink()}>WhatsApp</a>
+              <a href={`mailto:${site.email}`}>Email</a>
+              <Link href="/privacy">Privacy</Link>
+              <span>© 2026 {site.legalName}</span>
+            </div>
+          </div>
+        </footer>
+
+        <div className="fixed inset-x-4 bottom-4 z-30 sm:hidden">
+          <Button>
+            Get My Free Website Audit <ArrowRight className="size-4" />
+          </Button>
+        </div>
+      </main>
+    </MotionConfig>
+  )
+}

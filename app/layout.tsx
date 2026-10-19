@@ -18,13 +18,11 @@ export const metadata: Metadata = {
     url: site.url,
     siteName: site.legalName,
     type: 'website',
-    images: [{ url: '/apple-icon.png', width: 512, height: 512, alt: site.legalName }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Luxa | Websites for Growing Restaurants',
     description: 'Built for restaurants that are already growing.',
-    images: ['/apple-icon.png'],
   },
   icons: {
     icon: [
