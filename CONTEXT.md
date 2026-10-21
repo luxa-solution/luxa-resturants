@@ -1,41 +1,30 @@
-# Luxa Restaurant Funnel — Context
+# Luxa Restaurant Funnel
 
-A conversion funnel that convinces restaurant brands in **Lagos, Abuja and Ilorin** to
-buy a website from Luxa. Prospects are sent here from cold outreach/social; the goal is
-to collect a lead via a free-website-audit request or a WhatsApp conversation.
+Restaurant website service funnel for Luxa Web Studio. Focus: single restaurants in Ilorin, Lagos and Abuja. Canonical domain: https://eat.luxasolution.com.
 
-## Domain glossary
+## Contact and delivery
 
-- **Audit** — the free website-audit offer. The primary lead magnet. A prospect submits
-  the audit form (`#audit`) and Luxa follows up.
-- **Lead** — one audit-form submission: restaurant name, contact name, WhatsApp number,
-  optional Instagram handle, city, whether they currently have a website, and a message.
-- **Webhook** — the Google Apps Script `/exec` endpoint (`LEAD_WEBHOOK_URL`) that appends
-  each lead as a row in a Google Sheet.
-- **Package** — one of three service tiers: `Starter Menu Site`, `Growth`,
-  `Signature Brand Experience`. Each has a price range.
-- **Project** — a case study in the portfolio (`lib/projects.ts`), rendered at
-  `/projects/<slug>` and surfaced on the home page work grid.
-- **Focus cities** — Abuja, Lagos, Ilorin.
+Primary action: WhatsApp discussion. Secondary: labelled restaurant demonstration. Alternative: three required form fields, optional restaurant details, POST /api/lead. Existing webhook fields remain unchanged. LEAD_WEBHOOK_URL sends leads to the existing spreadsheet integration. Never commit that URL or submit test leads to the live spreadsheet.
 
-## Key values
+The free review covers current restaurant services and online information. Its date is agreed on WhatsApp. New websites receive a scoped quote. Published price ranges are guidance. Payment stages: 40%, 48%, 12%. Customer owns domain, hosting account, source code and content. One month of free maintenance. Exact coverage, recurring costs and payment milestone belong in the quote. No restaurant results, testimonials or paid project status have been verified.
 
-- WhatsApp: `2347047494586`
-- Email: `luxadigitalsolutions@gmail.com`
-- Instagram: `https://www.instagram.com/luxa.build/`
-- Brand/legal name: `Luxa Web Studio`
-- Pricing: Starter `₦150,000–₦500,000` · Growth `₦500,000–₦1,500,000` · Signature `₦1,500,000+`
+## Architecture
 
-## Structure
+- components/luxa-home.tsx: server-rendered page sections.
+- components/site-header.tsx: mobile navigation and contact shortcut.
+- components/restaurant-demo.tsx: illustrative menu filters and enquiry preview; sends no orders or payments.
+- components/lead-form.tsx: enquiry state and POST handling.
+- components/contact-link.tsx: common WhatsApp link and anonymous event helper.
+- lib/site.ts, lib/offerings.ts, lib/faqs.ts, lib/projects.ts: content and configuration.
+- app/projects/[slug]/page.tsx: four existing portfolio pages with unique metadata.
+- app/api/lead/route.ts: validation, bounded request body, best-effort per-instance rate limit, webhook timeout.
 
-- `app/page.tsx` → `components/luxa-home.tsx` (the whole funnel, one client component)
-- `app/projects/[slug]/page.tsx` (case-study template)
-- `lib/site.ts` (contact config + `waLink`), `lib/projects.ts`, `lib/offerings.ts`
-- `app/api/lead/route.ts` (form → webhook)
-- `public/projects/<slug>/` (case-study screenshots)
+## Measurement
 
-## Testing seams
+Vercel Analytics in production. whatsapp_click, demo_open, form_start, lead_submitted, lead_failed. Properties: placement and campaign source. No form answers in analytics. A click is not a qualified enquiry. No historical baseline supplied.
 
-Tests live next to behavior at these seams:
-`waLink`, `POST /api/lead`, the audit form (`LuxaHome`), `projects`, `packages`,
-`sitemap`, `robots`, `buildStructuredData`, `/privacy`, form labels.
+## Checks
+
+pnpm test, pnpm typecheck, pnpm build. Browser checks cover phone and desktop layout, keyboard navigation, menu filters, FAQ, form validation and error recovery. Use a local mock webhook to verify lead delivery without contacting real prospects.
+
+Approved strategy and evidence: LUXA-AUDIT-STRATEGY.md. Project-wide rules: AGENTS.md.

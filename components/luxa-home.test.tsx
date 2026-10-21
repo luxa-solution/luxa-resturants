@@ -1,88 +1,96 @@
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import LuxaHome from './luxa-home'
+﻿import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import LeadForm from "./lead-form";
 
-async function fillAndSubmit() {
-  const user = userEvent.setup()
-  render(<LuxaHome />)
-
-  await user.type(screen.getByPlaceholderText('Restaurant name'), 'Savour Lagos')
-  await user.type(screen.getByPlaceholderText('Your name'), 'Ada')
-  await user.type(screen.getByPlaceholderText('WhatsApp number (+234)'), '+2348012345678')
-  await user.click(screen.getByRole('button', { name: /get my free website audit/i }))
+async function fill() {
+  const user = userEvent.setup();
+  render(<LeadForm />);
+  await user.type(screen.getByLabelText("Restaurant name"), "Savour Lagos");
+  await user.type(screen.getByLabelText("Your name"), "Ada");
+  await user.type(screen.getByLabelText("WhatsApp number"), "+2348012345678");
+  return user;
 }
 
-describe('audit form', () => {
+describe("restaurant enquiry", () => {
   beforeEach(() => {
     vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 })),
-    )
-  })
-
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ ok: true }), { status: 200 }),
+        ),
+    );
+  });
   afterEach(() => {
-    vi.unstubAllGlobals()
-  })
-
-  it('posts the lead and shows a success message', async () => {
-    await fillAndSubmit()
-
-    expect(await screen.findByText('Audit request received.')).toBeInTheDocument()
-
-    const fetchMock = fetch as unknown as ReturnType<typeof vi.fn>
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-    const [url, init] = fetchMock.mock.calls[0]
-    expect(url).toBe('/api/lead')
-    const sent = JSON.parse((init as RequestInit).body as string)
-    expect(sent.restaurant).toBe('Savour Lagos')
-    expect(sent.name).toBe('Ada')
-    expect(sent.whatsapp).toBe('+2348012345678')
-  })
-
-  it('shows an error message when the request fails', async () => {
-    ;(fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+    vi.unstubAllGlobals();
+  });
+  it("delivers the required fields and confirms receipt", async () => {
+    const user = await fill();
+    await user.click(
+      screen.getByRole("button", { name: /request a free review/i }),
+    );
+    expect(await screen.findByText("Request received.")).toBeInTheDocument();
+    const [url, init] = vi.mocked(fetch).mock.calls[0];
+    expect(url).toBe("/api/lead");
+    expect(JSON.parse(init?.body as string)).toMatchObject({
+      restaurant: "Savour Lagos",
+      name: "Ada",
+      whatsapp: "+2348012345678",
+      city: "",
+      hasWebsite: "",
+    });
+    expect(
+      screen.getByRole("link", { name: /continue on whatsapp/i }),
+    ).toHaveAttribute(
+      "href",
+      expect.stringContaining("https://wa.me/2347047494586"),
+    );
+  });
+  it("keeps entered values and provides a contact link after failure", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
       new Response(JSON.stringify({ ok: false }), { status: 502 }),
-    )
-
-    await fillAndSubmit()
-
-    expect(await screen.findByRole('alert')).toHaveTextContent(/couldn.t send|try again|went wrong/i)
-    expect(screen.queryByText('Audit request received.')).not.toBeInTheDocument()
-  })
-
-  it('exposes an accessible label for every field', () => {
-    render(<LuxaHome />)
-
-    expect(screen.getByLabelText('Restaurant name')).toBeInTheDocument()
-    expect(screen.getByLabelText('Your name')).toBeInTheDocument()
-    expect(screen.getByLabelText('WhatsApp number')).toBeInTheDocument()
-    expect(screen.getByLabelText('Instagram handle')).toBeInTheDocument()
-    expect(screen.getByLabelText('City')).toBeInTheDocument()
-    expect(screen.getByLabelText('Do you have a website?')).toBeInTheDocument()
-    expect(screen.getByLabelText('Anything you want us to know? (optional)')).toBeInTheDocument()
-  })
-
-  it('submits the selected city and website status', async () => {
-    const user = userEvent.setup()
-    render(<LuxaHome />)
-
-    await user.type(screen.getByPlaceholderText('Restaurant name'), 'Savour Lagos')
-    await user.type(screen.getByPlaceholderText('Your name'), 'Ada')
-    await user.type(screen.getByPlaceholderText('WhatsApp number (+234)'), '+2348012345678')
-
-    await user.click(screen.getByLabelText('City'))
-    await user.click(await screen.findByRole('option', { name: 'Lagos' }))
-    await user.click(screen.getByLabelText('Do you have a website?'))
-    await user.click(await screen.findByRole('option', { name: 'None' }))
-
-    await user.click(screen.getByRole('button', { name: /get my free website audit/i }))
-    expect(await screen.findByText('Audit request received.')).toBeInTheDocument()
-
-    const fetchMock = fetch as unknown as ReturnType<typeof vi.fn>
-    const [, init] = fetchMock.mock.calls[0]
-    const sent = JSON.parse((init as RequestInit).body as string)
-    expect(sent.city).toBe('Lagos')
-    expect(sent.hasWebsite).toBe('None')
-  })
-})
+    );
+    const user = await fill();
+    await user.click(
+      screen.getByRole("button", { name: /request a free review/i }),
+    );
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      /could not send/i,
+    );
+    expect(screen.getByLabelText("Restaurant name")).toHaveValue(
+      "Savour Lagos",
+    );
+    expect(
+      screen.getByRole("link", { name: /contact us on whatsapp/i }),
+    ).toHaveAttribute("href", expect.stringContaining("https://wa.me/"));
+    expect(
+      screen.getByRole("button", { name: /request a free review/i }),
+    ).toBeEnabled();
+  });
+  it("preserves optional fields in the webhook contract", async () => {
+    const user = await fill();
+    await user.click(screen.getByText("Add restaurant details"));
+    await user.type(
+      screen.getByLabelText("Website or Instagram link (optional)"),
+      "https://example.com",
+    );
+    await user.selectOptions(screen.getByLabelText("City (optional)"), "Lagos");
+    await user.selectOptions(
+      screen.getByLabelText("Do you have a website? (optional)"),
+      "None",
+    );
+    await user.click(
+      screen.getByRole("button", { name: /request a free review/i }),
+    );
+    expect(await screen.findByText("Request received.")).toBeInTheDocument();
+    expect(
+      JSON.parse(vi.mocked(fetch).mock.calls[0][1]?.body as string),
+    ).toMatchObject({
+      instagram: "https://example.com",
+      city: "Lagos",
+      hasWebsite: "None",
+    });
+  });
+});

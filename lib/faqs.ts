@@ -1,12 +1,48 @@
-export type Faq = { question: string; answer: string }
-
+﻿export type Faq = { question: string; answer: string };
 export const faqs: Faq[] = [
-  { question: 'Do I need a website if I have Instagram?', answer: 'Instagram starts the conversation. Your website gives customers one clear place to browse, decide and order.' },
-  { question: 'How long does it take?', answer: 'Most launches are designed around a focused 7–14 day build window, depending on scope and content.' },
-  { question: 'Can customers order via WhatsApp?', answer: 'Yes. We build clear one-tap WhatsApp actions with a pre-filled message to make ordering easier.' },
-  { question: 'Can I update the menu myself?', answer: 'Yes. We can set up a simple editing flow and show your team how to use it.' },
-  { question: 'Will it show on Google?', answer: 'We set up the foundations that help people find your location, menu and services on Google.' },
-  { question: 'Do you handle domain and hosting?', answer: 'Yes. We can guide or handle the setup so launch feels straightforward.' },
-  { question: 'Do you work outside Abuja, Lagos and Ilorin?', answer: 'Yes. Those are our focus cities, but a good restaurant website can be built anywhere.' },
-  { question: 'What do I need to give you?', answer: 'Your menu, best photos, brand details and a little time to share what makes your restaurant special.' },
-]
+  {
+    question: "Why have a website if we use Instagram?",
+    answer:
+      "Keep using Instagram. A website gives customers a clear place to check your menu, opening hours, location and contact details. You can share its link from your existing channels.",
+  },
+  {
+    question: "What if we do not have a website?",
+    answer:
+      "We can discuss a new website. Share your menu, services and current online pages. We explain the proposed scope and prepare a quote before work starts.",
+  },
+  {
+    question: "What does the free review include?",
+    answer:
+      "We look at your restaurant’s service and current online information. We explain where a website could help customers find information or contact you. We agree a review date with you on WhatsApp.",
+  },
+  {
+    question: "Can customers contact us about orders?",
+    answer:
+      "Yes. A WhatsApp link can open a conversation with your team. A basket, online payment or order management system requires separate planning and a confirmed scope.",
+  },
+  {
+    question: "Can our team update the menu?",
+    answer:
+      "We discuss who will change the menu before quoting. If you need an editing system or ongoing updates, we include the agreed work and costs in your quote.",
+  },
+  {
+    question: "What will the website cost?",
+    answer:
+      "The published ranges are guidance. The final price depends on the pages, content and functions required. Your quote identifies included work, payment stages and recurring costs such as domain and hosting fees.",
+  },
+  {
+    question: "How long will the project take?",
+    answer:
+      "We agree a delivery schedule after reviewing the scope and available content. Your menu, photos, feedback and any required account access affect that schedule.",
+  },
+  {
+    question: "Who owns the website and accounts?",
+    answer:
+      "You own the domain, hosting account, source code and content. We include one month of free website maintenance. Your quote defines maintenance coverage and any support after that period.",
+  },
+  {
+    question: "Will a website guarantee more sales?",
+    answer:
+      "No. A website can help customers find information and contact you. Sales also depend on demand, pricing, food, service and promotion. We do not promise a sales increase or a Google ranking.",
+  },
+];
