@@ -8,7 +8,8 @@ export const packages: Package[] = [
   {
     name: "Starter Menu Site",
     price: "₦150,000 – ₦500,000",
-    blurb: "A clear place for your menu, location and contact details.",
+    blurb:
+      "For a restaurant that needs its menu and contact details on one page.",
     features: [
       "One-page website",
       "Menu and opening hours",
@@ -19,7 +20,8 @@ export const packages: Package[] = [
   {
     name: "Growth",
     price: "₦500,000 – ₦1,500,000",
-    blurb: "More room to explain your food, services and restaurant.",
+    blurb:
+      "For a restaurant that needs separate pages for its food, services and enquiries.",
     features: [
       "Pages based on your scope",
       "Food and restaurant galleries",
@@ -30,7 +32,8 @@ export const packages: Package[] = [
   {
     name: "Signature Brand Experience",
     price: "₦1,500,000+",
-    blurb: "A custom direction for a restaurant with a broader brief.",
+    blurb:
+      "For a restaurant that needs a custom visual direction and more detailed website functions.",
     features: [
       "Custom visual direction",
       "Multiple content sections and pages",

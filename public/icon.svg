@@ -1,5 +1,13 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="180" height="180" rx="40" fill="#100B08" />
-  <path d="M52 46H74V112H124V132H52V46Z" fill="#FFF6E9" />
-  <circle cx="143" cy="122" r="14" fill="#FF8A2A" />
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <style>
+    .surface { fill: #F7EDDF; stroke: #D9CBBB; }
+    .mark { fill: #29170E; }
+    @media (prefers-color-scheme: dark) {
+      .surface { fill: #100B08; stroke: #39281D; }
+      .mark { fill: #F7EDDF; }
+    }
+  </style>
+  <rect class="surface" x="0.5" y="0.5" width="63" height="63" rx="14"/>
+  <path class="mark" d="M15 16H31V18H28C26.3 18 26 18.6 26 20V44C26 45.3 26.7 46 28 46H35C40 46 42.4 43.4 44 38H46L44.4 49H15V47H18C20.1 47 20.8 46.4 20.8 44.5V20.5C20.8 18.6 20.2 18 18.1 18H15V16Z"/>
+  <circle cx="51" cy="45.8" r="3.2" fill="#FF8A2A"/>
 </svg>

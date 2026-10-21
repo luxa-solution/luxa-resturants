@@ -28,24 +28,54 @@ export default function SiteHeader() {
     };
   }, [open]);
   useEffect(() => {
+    let focusFrame = 0;
     const update = () => {
-      const hero = document.getElementById("intro")?.getBoundingClientRect();
+      const benefits = document.getElementById("why")?.getBoundingClientRect();
       const contact = document.getElementById("audit")?.getBoundingClientRect();
+      const focused = document.activeElement;
+      const inlineContactVisible = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>(
+          'main a[href^="https://wa.me/"]',
+        ),
+      ).some((link) => {
+        const rect = link.getBoundingClientRect();
+        return (
+          rect.width > 0 && rect.top < window.innerHeight && rect.bottom > 0
+        );
+      });
+      const usingControl =
+        focused instanceof HTMLElement &&
+        focused.matches("a, button, input, select, textarea, summary") &&
+        !focused.closest(".mobile-contact");
       setShowContact(
         Boolean(
-          hero &&
-          hero.bottom < 0 &&
-          contact &&
-          contact.top > window.innerHeight,
-        ),
+          focused instanceof HTMLElement && focused.closest(".mobile-contact"),
+        ) ||
+          Boolean(
+            benefits &&
+            benefits.bottom < 0 &&
+            !usingControl &&
+            !inlineContactVisible &&
+            contact &&
+            contact.top > window.innerHeight,
+          ),
       );
+    };
+    const updateAfterFocus = () => {
+      cancelAnimationFrame(focusFrame);
+      focusFrame = requestAnimationFrame(update);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
+    window.addEventListener("focusin", update);
+    window.addEventListener("focusout", updateAfterFocus);
     return () => {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
+      window.removeEventListener("focusin", update);
+      window.removeEventListener("focusout", updateAfterFocus);
+      cancelAnimationFrame(focusFrame);
     };
   }, []);
   return (
@@ -53,7 +83,7 @@ export default function SiteHeader() {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      <header className="site-header dark-surface">
+      <header className="site-header home-header dark-surface">
         <div className="container header-inner">
           <Link href="/" className="wordmark" aria-label="Luxa Web Studio home">
             luxa<span>.</span>

@@ -1,8 +1,16 @@
 ﻿import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 export const alt = "Luxa Web Studio. Websites for restaurants.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const accent = await readFile(
+    join(process.cwd(), "public/fonts/dancing-script-500.ttf"),
+  );
+  const bodyFont = await readFile(
+    join(process.cwd(), "public/fonts/plus-jakarta-sans-500.ttf"),
+  );
   return new ImageResponse(
     <div
       style={{
@@ -14,6 +22,7 @@ export default function OpengraphImage() {
         background: "#100b08",
         color: "#f7eddf",
         padding: "52px 64px",
+        fontFamily: "Jakarta",
       }}
     >
       <div
@@ -41,7 +50,13 @@ export default function OpengraphImage() {
       >
         <span>Your menu. Your restaurant.</span>
         <span
-          style={{ color: "#ff8a2a", fontFamily: "serif", fontStyle: "italic" }}
+          style={{
+            color: "#ff8a2a",
+            fontFamily: "Dancing Script",
+            fontWeight: 500,
+            letterSpacing: 0,
+            fontSize: 88,
+          }}
         >
           One clear website.
         </span>
@@ -60,6 +75,22 @@ export default function OpengraphImage() {
         <span>eat.luxasolution.com</span>
       </div>
     </div>,
-    size,
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Jakarta",
+          data: Uint8Array.from(bodyFont).buffer,
+          weight: 500,
+          style: "normal",
+        },
+        {
+          name: "Dancing Script",
+          data: Uint8Array.from(accent).buffer,
+          weight: 500,
+          style: "normal",
+        },
+      ],
+    },
   );
 }

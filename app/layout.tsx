@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Plus_Jakarta_Sans } from "next/font/google";
+import { Dancing_Script, Plus_Jakarta_Sans } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -8,10 +8,11 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
 });
-const instrument = Instrument_Serif({
+const accent = Dancing_Script({
   subsets: ["latin"],
-  variable: "--font-instrument",
-  weight: "400",
+  variable: "--font-accent",
+  weight: "500",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -37,19 +38,22 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
+        url: "/icon-light-32x32.png?v=2",
+        sizes: "32x32",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/icon-dark-32x32.png",
+        url: "/icon-dark-32x32.png?v=2",
+        sizes: "32x32",
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/icon.svg",
+        url: "/icon.svg?v=2",
         type: "image/svg+xml",
+        sizes: "any",
       },
     ],
-    apple: "/apple-icon.png",
+    apple: "/apple-icon.png?v=2",
   },
 };
 
@@ -68,11 +72,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${jakarta.variable} ${instrument.variable} antialiased`}
-      >
+      <body className={`${jakarta.variable} ${accent.variable} antialiased`}>
         {children}
-        {process.env.NODE_ENV === "production" && process.env.VERCEL === "1" && <Analytics />}
+        {process.env.NODE_ENV === "production" &&
+          process.env.VERCEL === "1" && <Analytics />}
       </body>
     </html>
   );

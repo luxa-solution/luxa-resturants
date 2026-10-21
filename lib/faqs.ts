@@ -3,37 +3,37 @@ export const faqs: Faq[] = [
   {
     question: "Why have a website if we use Instagram?",
     answer:
-      "Keep using Instagram. A website gives customers a clear place to check your menu, opening hours, location and contact details. You can share its link from your existing channels.",
+      "Your website and Instagram can work together. Use Instagram to share your food and news. Give customers one website link to check your full menu, opening hours, location and contact details.",
   },
   {
     question: "What if we do not have a website?",
     answer:
-      "We can discuss a new website. Share your menu, services and current online pages. We explain the proposed scope and prepare a quote before work starts.",
+      "We can help you plan a new website. Tell us about your restaurant, menu and services. We recommend the pages and customer actions you need, then prepare a quote for the agreed work.",
   },
   {
     question: "What does the free review include?",
     answer:
-      "We look at your restaurant’s service and current online information. We explain where a website could help customers find information or contact you. We agree a review date with you on WhatsApp.",
+      "We review your restaurant’s service, current online information and goals. We identify where a website could help customers find your menu, plan a visit or contact your team. We agree the review date on WhatsApp.",
   },
   {
     question: "Can customers contact us about orders?",
     answer:
-      "Yes. A WhatsApp link can open a conversation with your team. A basket, online payment or order management system requires separate planning and a confirmed scope.",
+      "We can connect the website to your team on WhatsApp. If you need a basket, online payments or order handling, tell us how you want the process to work. We assess the requirements and recommend an approach in your quote.",
   },
   {
     question: "Can our team update the menu?",
     answer:
-      "We discuss who will change the menu before quoting. If you need an editing system or ongoing updates, we include the agreed work and costs in your quote.",
+      "We agree a practical way to keep your menu current. Tell us who will change dishes and prices, and how often. Your quote can include an editing system, update support or both, based on the agreed scope.",
   },
   {
     question: "What will the website cost?",
     answer:
-      "The published ranges are guidance. The final price depends on the pages, content and functions required. Your quote identifies included work, payment stages and recurring costs such as domain and hosting fees.",
+      "We prepare a quote around your restaurant’s needs. The published ranges show general guidance. Your quote explains the pages, functions, payment stages and recurring costs before work starts.",
   },
   {
     question: "How long will the project take?",
     answer:
-      "We agree a delivery schedule after reviewing the scope and available content. Your menu, photos, feedback and any required account access affect that schedule.",
+      "We plan the schedule with you after reviewing the scope. We set out the content, feedback and account access needed at each stage, so you know what to prepare and when to review the work.",
   },
   {
     question: "Who owns the website and accounts?",
@@ -41,8 +41,8 @@ export const faqs: Faq[] = [
       "You own the domain, hosting account, source code and content. We include one month of free website maintenance. Your quote defines maintenance coverage and any support after that period.",
   },
   {
-    question: "Will a website guarantee more sales?",
+    question: "How can a website support our restaurant’s goals?",
     answer:
-      "No. A website can help customers find information and contact you. Sales also depend on demand, pricing, food, service and promotion. We do not promise a sales increase or a Google ranking.",
+      "Start with the result you want, such as more order enquiries, table requests or catering bookings. We review how customers find and contact you, then recommend pages and functions that support that goal. Enquiry tracking can be included in the agreed scope.",
   },
 ];

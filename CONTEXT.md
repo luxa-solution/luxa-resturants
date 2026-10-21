@@ -28,3 +28,7 @@ Vercel Analytics in production. whatsapp_click, demo_open, form_start, lead_subm
 pnpm test, pnpm typecheck, pnpm build. Browser checks cover phone and desktop layout, keyboard navigation, menu filters, FAQ, form validation and error recovery. Use a local mock webhook to verify lead delivery without contacting real prospects.
 
 Approved strategy and evidence: LUXA-AUDIT-STRATEGY.md. Project-wide rules: AGENTS.md.
+
+## User review refinements
+
+Plus Jakarta Sans for body text. Dancing Script 500 for short accents. Licensed Breathine files are not present. The phone opening keeps one WhatsApp action. Extra trust details follow the demonstration. Payment stages use full-width phone rows and a once-only count-up, with stable final values for screen readers and reduced motion. Favicon retains the L and orange dot. FAQs focus on the restaurant's goals and the planning process.

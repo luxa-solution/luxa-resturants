@@ -4,7 +4,7 @@ Date: 21 October 2026. Implemented in the existing Next.js project. No deploymen
 
 ## Changes
 
-- Cream sections, dark brown opening and closing sections, orange contact actions, and restrained serif accents.
+- Cream sections, dark brown opening and closing sections, orange contact actions, and short Dancing Script accents.
 - Static homepage sections rendered on the server. Separate client components handle navigation, demonstration, form state, and contact events.
 - WhatsApp is the primary contact path. The restaurant demonstration has menu filters and a message preview. It is labelled as a concept and sends no orders or payments.
 - Three required enquiry fields. Optional details remain available. Visible labels, telephone input, loading state, failure recovery, retained values, and success feedback are included.
@@ -13,7 +13,11 @@ Date: 21 October 2026. Implemented in the existing Next.js project. No deploymen
 - Preserved the three published price ranges. Added ownership, payment stages, maintenance, and quote-specific scope information.
 - Updated all four project pages, privacy, error recovery, social preview, canonical domain, and project metadata.
 - Shared contact tracking uses placement and campaign source. No form answers are added to events. The analytics script loads in production on Vercel, where its endpoint is available.
-- Fixed loaded font usage, text contrast, image priority, and image size guidance. Existing image assets and brand marks are retained.
+- Improved phone text sizes, loaded font usage, contrast, and image size guidance. The opening on phones has one WhatsApp action. Supporting trust details follow the demonstration.
+- Added once-only payment count-up, full-width phone payment rows, stable screen-reader values, and reduced-motion support.
+- Revised FAQs around client goals and collaborative planning. Replaced vague project copy with descriptions of visible content and functions.
+- Refined the L-and-dot favicon, light and dark raster variants, and Apple icon. The website wordmark is unchanged.
+- Dancing Script replaces Instrument Serif in page accents and the share image. Breathine files and a webfont licence were not available in the project, so the user-approved fallback was used. Font licences are retained in public/fonts.
 - Repaired the lockfile's missing sharp peer reference. Runtime package versions are unchanged. Automatic framework edits to the reviewed AGENTS.md are disabled.
 
 ## Verification
@@ -32,17 +36,17 @@ Final production-build measurement, using Lighthouse 13.5.0 and its default mobi
 
 | Check | Result |
 | --- | --- |
-| Performance | 90 |
+| Performance | 91 |
 | Accessibility | 100 |
 | Best practices | 100 |
 | SEO | 100 |
-| Largest Contentful Paint | 3.3 seconds |
+| Largest Contentful Paint | 3.2 seconds |
 | Cumulative Layout Shift | 0 |
-| Total Blocking Time | 90 milliseconds |
+| Total Blocking Time | 80 milliseconds |
 
 LCP remains above the 2.5-second target. This is a local lab result. It does not establish live Core Web Vitals, real-user INP, full accessibility compliance, or a conversion improvement. Repeat measurements on the deployment and collect field data.
 
-Screenshots and full Lighthouse reports: `C:/Users/HP/AppData/Local/Temp/luxa-redesign-20261021/`. Final report: `lighthouse-final.report.html`. Desktop and phone captures: `desktop.png`, `mobile.png`, and their `-full.png` versions.
+Screenshots and full Lighthouse reports: `C:/Users/HP/AppData/Local/Temp/luxa-refinement-20261021/`. Final report: `lighthouse-final.report.html`. Desktop and phone captures: `desktop.png`, `mobile.png`, and their `-full.png` versions.
 
 ## Remaining checks before launch
 
@@ -50,10 +54,22 @@ Screenshots and full Lighthouse reports: `C:/Users/HP/AppData/Local/Temp/luxa-re
 - Verify production analytics events on Vercel. Clicks do not establish actual conversations or qualified enquiries.
 - Put exact maintenance coverage, recurring costs, delivery dates, and the progress payment milestone in each quote.
 - Confirm portfolio publication permission and project status before adding client endorsements or paid-work claims.
-- No Breathine font or replacement logo was adopted. Formal ASD-STE100 dictionary verification was not performed.
+- No Breathine font or replacement website logo was adopted. The favicon was refined. Formal ASD-STE100 dictionary verification was not performed.
 
 ## Commands
 
 Standard commands: `pnpm test`, `pnpm typecheck`, `pnpm build`, `pnpm dev`.
 
 The machine's pnpm version launcher failed during setup. Checks used the installed package entry points: `node node_modules/vitest/vitest.mjs run --maxWorkers=2`, `node node_modules/typescript/bin/tsc --noEmit`, and `node node_modules/next/dist/bin/next build`. The dependency helper was replaced with the installed pnpm entry point and version management disabled for that invocation only.
+
+## User review refinements
+
+The phone opening removes the desktop preview, secondary link, location line and assurance list. It keeps the service explanation and one primary action. The phone header also removes its duplicate contact link.
+
+Payment values animate once when the section enters view. Values remain 40%, 48% and 12% for screen readers and reduced-motion users. Phone layout uses three full-width rows.
+
+The fixed phone contact action starts after the service explanation. It hides when an on-page WhatsApp action is visible and preserves keyboard focus until the user leaves it.
+
+Focused browser checks passed for all these changes, including 320 px reflow and reduced motion. Screenshots include mobile.png, mobile-payment.png and share-image.png. The favicon review is in C:/Users/HP/AppData/Local/Temp/luxa-icon-review/preview.png.
+
+Font references: [Dancing Script licence](https://github.com/google/fonts/blob/main/ofl/dancingscript/OFL.txt), [Breathine webfont licensing](https://www.myfonts.com/collections/breathine-font-mjb-letters/).

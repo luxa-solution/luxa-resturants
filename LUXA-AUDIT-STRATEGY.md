@@ -1,6 +1,6 @@
 # LUXA audit and proposed strategy
 
-Date: 21 October 2026. Status: proposal for review. No implementation approved.
+Date: 21 October 2026. Status: initial strategy approved and implemented. This document records the discovery findings. See IMPLEMENTATION.md for later user review changes and current checks.
 
 ## 1. Executive assessment
 

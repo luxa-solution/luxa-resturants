@@ -15,6 +15,7 @@ import ContactLink from "@/components/contact-link";
 import SiteHeader from "@/components/site-header";
 import RestaurantDemo from "@/components/restaurant-demo";
 import LeadForm from "@/components/lead-form";
+import PaymentStages from "@/components/payment-stages";
 
 const uses = [
   [
@@ -58,12 +59,13 @@ export default function LuxaHome() {
           <div className="container hero-layout">
             <div className="hero-copy">
               <p className="eyebrow">
-                <span className="status-dot" /> Websites for restaurants in
-                Nigeria
+                <span className="status-dot" /> Websites for restaurants
               </p>
               <h1>
-                Your menu.
-                <br />
+                <span className="hero-menu-line">
+                  Your menu.
+                  <br />
+                </span>
                 Your restaurant.
                 <br />
                 <span className="editorial orange-text">
@@ -71,14 +73,14 @@ export default function LuxaHome() {
                 </span>
               </h1>
               <p className="hero-description">
-                Help customers browse your menu, find your restaurant and
-                contact your team on WhatsApp.
+                We build restaurant websites with clear menus, location details
+                and WhatsApp contact.
               </p>
               <div className="action-row">
                 <ContactLink placement="hero" className="button button-orange">
                   Discuss my restaurant <ArrowUpRight size={18} />
                 </ContactLink>
-                <a className="text-link light-link" href="#demo">
+                <a className="text-link light-link hero-secondary" href="#demo">
                   View restaurant demo <ArrowDown size={16} />
                 </a>
               </div>
@@ -86,42 +88,72 @@ export default function LuxaHome() {
                 <MapPin size={14} /> Ilorin, Lagos, Abuja. Built by Luxa Web
                 Studio.
               </p>
+              <div className="hero-assurances">
+                <span>
+                  <Check size={14} /> Written scope before work
+                </span>
+                <span>
+                  <Check size={14} /> You own the website & accounts
+                </span>
+                <span>
+                  <Check size={14} /> One month of free maintenance
+                </span>
+              </div>
             </div>
             <div className="hero-visual">
-              <div className="hero-image-wrap">
-                <Image
-                  src="/images/restaurant-dining.webp"
-                  alt="A restaurant dining space with tables set for guests"
-                  fill
-                  priority
-                  fetchPriority="high"
-                  sizes="(min-width: 1296px) 502px, (min-width: 640px) 42vw, calc(100vw - 40px)"
-                  className="hero-image"
-                />
-                <div className="hero-image-caption">
-                  <span>Good food deserves</span>
-                  <span className="editorial">a clear way to find it.</span>
+              <div className="hero-preview">
+                <div className="hero-preview-top">
+                  <span className="preview-dots" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <span>Restaurant website concept</span>
+                </div>
+                <div className="hero-preview-image">
+                  <Image
+                    src="/images/restaurant-food.webp"
+                    alt="Grilled food and salad in an example restaurant website"
+                    fill
+                    loading="lazy"
+                    sizes="(min-width: 1296px) 502px, (min-width: 640px) 42vw, calc(100vw - 40px)"
+                    className="hero-image"
+                  />
+                  <div className="hero-preview-brand">
+                    <span>
+                      savour<span> / kitchen</span>
+                    </span>
+                    <p>
+                      Good food.
+                      <br />A place at the table.
+                    </p>
+                  </div>
+                </div>
+                <div className="hero-preview-body">
+                  <div className="hero-preview-navigation">
+                    <span>Menu & prices</span>
+                    <span>Plan a visit</span>
+                    <span>Contact</span>
+                  </div>
+                  <p>
+                    Your menu, opening hours and location.
+                    <br />
+                    Ready for customers to explore.
+                  </p>
+                  <a href="#demo">
+                    Explore the website concept <ArrowUpRight size={16} />
+                  </a>
+                  <span className="hero-preview-disclaimer">
+                    Illustrative design. Not client work.
+                  </span>
                 </div>
               </div>
               <div className="hero-note">
                 <span className="note-number">01 /</span>
-                <p>
-                  A website shaped around
-                  <br />
-                  how your restaurant works.
-                </p>
+                <p>A clear menu. A direct path to your team.</p>
                 <ArrowDown size={20} />
               </div>
             </div>
-          </div>
-          <div className="container hero-bottom">
-            <span>Custom design. Clear scope. Your ownership.</span>
-            <a
-              href="#demo"
-              aria-label="Explore the restaurant website demonstration"
-            >
-              <ArrowDown size={18} />
-            </a>
           </div>
         </section>
         <section id="demo" className="section demo-section">
@@ -132,7 +164,7 @@ export default function LuxaHome() {
                 <h2>
                   Show the food.
                   <br />
-                  <span className="editorial">Make the next step clear.</span>
+                  <span className="editorial">Welcome the enquiry.</span>
                 </h2>
               </div>
               <p>
@@ -141,6 +173,17 @@ export default function LuxaHome() {
               </p>
             </div>
             <RestaurantDemo />
+            <div className="phone-assurances">
+              <span>
+                <Check size={14} /> Written scope before work
+              </span>
+              <span>
+                <Check size={14} /> You own the website and accounts
+              </span>
+              <span>
+                <Check size={14} /> One month of free maintenance
+              </span>
+            </div>
           </div>
         </section>
         <section id="why" className="section uses-section">
@@ -150,7 +193,7 @@ export default function LuxaHome() {
               <h2>
                 Less searching.
                 <br />
-                <span className="editorial">Clearer decisions.</span>
+                Clearer decisions.
               </h2>
               <p>
                 Your Instagram page starts a conversation. Your website gives
@@ -182,8 +225,8 @@ export default function LuxaHome() {
                 </h2>
               </div>
               <p>
-                Websites from education and consultancy. These examples show our
-                design and development work, not restaurant sales results.
+                Explore our work in education and consultancy. See the pages,
+                content and contact paths we build.
               </p>
             </div>
             <div className="featured-work">
@@ -211,6 +254,14 @@ export default function LuxaHome() {
                       <ArrowUpRight size={22} />
                     </span>
                   </div>
+                  <p className="work-delivery">
+                    {i === 0
+                      ? "Programme details, a five-month course plan and an enrolment form."
+                      : "English and Arabic pages, course information and published fees."}
+                  </p>
+                  <span className="work-case-link">
+                    Explore the website <ArrowUpRight size={15} />
+                  </span>
                 </Link>
               ))}
             </div>
@@ -272,9 +323,26 @@ export default function LuxaHome() {
               integrations require a separate scope check. We confirm what is
               included before you commit.
             </p>
+            <div className="quote-factors">
+              <p className="eyebrow">What shapes your quote</p>
+              <dl>
+                <div>
+                  <dt>Pages & content</dt>
+                  <dd>How much your website needs to show.</dd>
+                </div>
+                <div>
+                  <dt>Customer actions</dt>
+                  <dd>Contact links, forms or other agreed functions.</dd>
+                </div>
+                <div>
+                  <dt>Updates & support</dt>
+                  <dd>Who makes changes and what support is included.</dd>
+                </div>
+              </dl>
+            </div>
             <div className="ownership-strip">
               <div>
-                <p className="eyebrow">Yours from the start</p>
+                <p className="eyebrow">Website ownership</p>
                 <h3>
                   Your website.
                   <br />
@@ -305,7 +373,7 @@ export default function LuxaHome() {
                 <h2>
                   Know what happens
                   <br />
-                  <span className="editorial">before you begin.</span>
+                  before you begin.
                 </h2>
               </div>
               <p>
@@ -322,17 +390,7 @@ export default function LuxaHome() {
                 </article>
               ))}
             </div>
-            <div className="payment-note">
-              <span className="eyebrow">Payment stages</span>
-              <p>
-                <strong>40%</strong> upfront <span>/</span> <strong>48%</strong>{" "}
-                at the agreed progress milestone <span>/</span>{" "}
-                <strong>12%</strong> after project submission.
-              </p>
-              <p>
-                Your quote defines the progress milestone and handover terms.
-              </p>
-            </div>
+            <PaymentStages />
           </div>
         </section>
         <section id="faq" className="section faq-section">
@@ -342,7 +400,7 @@ export default function LuxaHome() {
               <h2>
                 Good questions.
                 <br />
-                <span className="editorial">Clear answers.</span>
+                Clear answers.
               </h2>
               <p>Need a detail that is not covered here?</p>
               <ContactLink placement="faq" className="text-link">
@@ -372,13 +430,29 @@ export default function LuxaHome() {
                 <span className="editorial orange-text">your restaurant.</span>
               </h2>
               <p>
-                Tell us about your restaurant and what you need. We review your
-                service and current online information, then explain where a
-                website could help.
+                Tell us where customers find your menu today. We review your
+                restaurant’s service and online information, then explain where
+                a website could help.
               </p>
-              <p>
-                No website yet? We can prepare a quote for a new one. We agree
-                the review date with you on WhatsApp.
+              <div className="review-includes">
+                <p className="eyebrow">Your free review covers</p>
+                <ul>
+                  <li>
+                    <Check size={15} /> How customers find your restaurant
+                    information
+                  </li>
+                  <li>
+                    <Check size={15} /> Where a website could help your team
+                  </li>
+                  <li>
+                    <Check size={15} /> A proposed scope and quote, if you need
+                    one
+                  </li>
+                </ul>
+              </div>
+              <p className="review-date">
+                No website needed to start. We agree the review date on
+                WhatsApp.
               </p>
               <ContactLink placement="contact" className="button button-orange">
                 <MessageCircle size={18} /> Discuss my restaurant{" "}
@@ -404,6 +478,8 @@ export default function LuxaHome() {
               luxa<span>.</span>
             </Link>
             <p>
+              <strong>Luxa Web Studio</strong>
+              <br />
               Websites for restaurants.
               <br />
               Ilorin. Lagos. Abuja.
@@ -426,7 +502,7 @@ export default function LuxaHome() {
           <span>
             © {new Date().getFullYear()} {site.legalName}
           </span>
-          <span>Clear websites. Considered work.</span>
+          <span>Design, development and handover.</span>
         </div>
       </footer>
     </>
