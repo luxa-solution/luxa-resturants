@@ -1,0 +1,348 @@
+.hero {
+  background-image:
+    radial-gradient(
+      ellipse at 92% 16%,
+      rgb(155 81 34 / 16%),
+      transparent 58%
+    ),
+    repeating-linear-gradient(
+      120deg,
+      transparent 0 95px,
+      rgb(247 237 223 / 2.5%) 95px 96px
+    );
+}
+
+.scope-section {
+  background-image:
+    radial-gradient(
+      ellipse at 0% 48%,
+      rgb(155 81 34 / 11%),
+      transparent 64%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 143px,
+      rgb(247 237 223 / 2%) 143px 144px
+    );
+}
+
+.contact-section {
+  background-image:
+    radial-gradient(
+      ellipse at 12% 12%,
+      rgb(155 81 34 / 14%),
+      transparent 60%
+    ),
+    radial-gradient(rgb(247 237 223 / 3.5%) 0.6px, transparent 0.8px);
+  background-size: auto, 24px 24px;
+}
+
+.site-footer {
+  background-image: linear-gradient(
+    180deg,
+    rgb(155 81 34 / 4%),
+    transparent 72%
+  );
+}
+
+.button {
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.button > svg:last-child,
+.text-link > svg:last-child,
+.header-contact > svg:last-child,
+.more-work a > svg:last-child,
+.round-arrow svg,
+.work-image img {
+  transition: transform 180ms ease;
+}
+
+.button-orange:focus-visible {
+  background-color: #ffac66;
+  box-shadow: inset 0 0 0 1px rgb(16 11 8 / 16%);
+}
+
+.button-brown:focus-visible {
+  background-color: #4b2f1e;
+  box-shadow: inset 0 0 0 1px rgb(247 237 223 / 20%);
+}
+
+.button-orange:not(:disabled):active {
+  background-color: #ed7c24;
+}
+
+.button-brown:not(:disabled):active {
+  background-color: #3d2517;
+}
+
+.text-link,
+.header-contact,
+.more-work a,
+.footer-links a,
+.secondary-footer a {
+  transition:
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.text-link:focus-visible,
+.more-work a:focus-visible,
+.secondary-footer a:focus-visible {
+  color: #9b3f0a;
+}
+
+.light-link:focus-visible,
+.header-contact:focus-visible,
+.footer-links a:focus-visible {
+  color: var(--orange);
+}
+
+.desktop-nav a {
+  background-image: linear-gradient(var(--orange), var(--orange));
+  background-position: left bottom 7px;
+  background-size: 0 1px;
+  background-repeat: no-repeat;
+  transition:
+    color 160ms ease,
+    background-size 180ms ease;
+}
+
+.desktop-nav a:focus-visible {
+  color: var(--orange);
+  background-size: 100% 1px;
+}
+
+.mobile-nav a,
+.menu-toggle {
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.mobile-nav a:focus-visible,
+.menu-toggle:focus-visible,
+.menu-toggle[aria-expanded="true"] {
+  color: #f8b47c;
+  background-color: rgb(247 237 223 / 4%);
+  border-color: #a47049;
+}
+
+.round-arrow,
+.work-image,
+.work-case-link {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.work-item:focus-visible .round-arrow {
+  background-color: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.work-item:focus-visible .work-image {
+  border-color: #9b4e23;
+}
+
+.work-item:focus-visible .work-case-link {
+  color: #9b3f0a;
+}
+
+.work-item:hover img {
+  transform: none;
+}
+
+.faq-list summary,
+.optional-fields summary,
+.demo-filters button {
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.faq-list summary > span {
+  transition: transform 180ms ease;
+}
+
+.faq-list summary:focus-visible,
+.faq-list details[open] summary {
+  color: #8e481f;
+  background-color: rgb(233 219 200 / 24%);
+}
+
+.optional-fields summary:focus-visible {
+  color: #8e481f;
+}
+
+.demo-filters button:not([aria-pressed="true"]):focus-visible {
+  color: var(--ink);
+  border-color: #9b4e23;
+  background-color: #f2e8da;
+}
+
+.lead-panel input,
+.lead-panel select,
+.lead-panel textarea {
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.lead-panel input:focus-visible,
+.lead-panel select:focus-visible,
+.lead-panel textarea:focus-visible {
+  border-color: #9b4e23;
+  background-color: #fffdf8;
+  box-shadow: 0 0 0 3px rgb(155 78 35 / 10%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 16%),
+      0 4px 12px rgb(16 11 8 / 10%);
+  }
+
+  .button:not(:disabled):hover > svg:last-child,
+  .text-link:hover > svg:last-child,
+  .header-contact:hover > svg:last-child,
+  .more-work a:hover > svg:last-child,
+  .work-item:hover .round-arrow svg {
+    transform: translate(2px, -1px);
+  }
+
+  .button:not(:disabled):active {
+    transform: translateY(0);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%);
+  }
+
+  .desktop-nav a:hover {
+    background-size: 100% 1px;
+  }
+
+  .mobile-nav a:hover,
+  .menu-toggle:hover {
+    color: #f8b47c;
+    background-color: rgb(247 237 223 / 4%);
+    border-color: #a47049;
+  }
+
+  .more-work a:hover,
+  .secondary-footer a:hover {
+    color: #9b3f0a;
+  }
+
+  .footer-links a:hover {
+    color: var(--orange);
+  }
+
+  .work-item:hover .work-image img {
+    transform: scale(1.012);
+  }
+
+  .work-item:hover .work-image {
+    border-color: #a98567;
+  }
+
+  .work-item:hover .round-arrow {
+    background-color: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .work-item:hover .work-case-link {
+    color: #9b3f0a;
+  }
+
+  .faq-list summary:hover {
+    color: #8e481f;
+    background-color: rgb(233 219 200 / 24%);
+  }
+
+  .optional-fields summary:hover {
+    color: #8e481f;
+  }
+
+  .demo-filters button:not([aria-pressed="true"]):hover {
+    color: var(--ink);
+    border-color: #9b4e23;
+    background-color: #f2e8da;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero {
+    background-image:
+      radial-gradient(
+        ellipse at 100% 12%,
+        rgb(155 81 34 / 10%),
+        transparent 65%
+      ),
+      repeating-linear-gradient(
+        120deg,
+        transparent 0 95px,
+        rgb(247 237 223 / 1.8%) 95px 96px
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button > svg:last-child,
+  .text-link,
+  .text-link > svg:last-child,
+  .header-contact,
+  .header-contact > svg:last-child,
+  .more-work a,
+  .more-work a > svg:last-child,
+  .footer-links a,
+  .secondary-footer a,
+  .desktop-nav a,
+  .mobile-nav a,
+  .menu-toggle,
+  .round-arrow,
+  .round-arrow svg,
+  .work-image,
+  .work-image img,
+  .work-case-link,
+  .faq-list summary,
+  .faq-list summary > span,
+  .optional-fields summary,
+  .demo-filters button,
+  .lead-panel input,
+  .lead-panel select,
+  .lead-panel textarea {
+    transition: none;
+  }
+
+  .button:not(:disabled),
+  .button > svg:last-child,
+  .text-link > svg:last-child,
+  .header-contact > svg:last-child,
+  .more-work a > svg:last-child,
+  .work-item .round-arrow svg,
+  .work-item .work-image img {
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .hero,
+  .scope-section,
+  .contact-section,
+  .site-footer {
+    background-image: none;
+  }
+}

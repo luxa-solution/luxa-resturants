@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Dancing_Script, Plus_Jakarta_Sans } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
+import "./premium-details.css";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],

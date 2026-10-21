@@ -111,14 +111,20 @@ export default function LuxaHome() {
                   <span>Restaurant website concept</span>
                 </div>
                 <div className="hero-preview-image">
-                  <Image
-                    src="/images/restaurant-food.webp"
-                    alt="Grilled food and salad in an example restaurant website"
-                    fill
-                    loading="lazy"
-                    sizes="(min-width: 1296px) 502px, (min-width: 640px) 42vw, calc(100vw - 40px)"
-                    className="hero-image"
-                  />
+                  <picture>
+                    <source
+                      media="(max-width: 639px)"
+                      srcSet="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                    />
+                    <Image
+                      src="/images/luxa-jollof-premium-v2.webp"
+                      alt="Jollof rice, grilled chicken and plantain on a ceramic plate"
+                      fill
+                      loading="lazy"
+                      sizes="(min-width: 1296px) 502px, 42vw"
+                      className="hero-image"
+                    />
+                  </picture>
                   <div className="hero-preview-brand">
                     <span>
                       savour<span> / kitchen</span>

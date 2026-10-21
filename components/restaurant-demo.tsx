@@ -8,14 +8,14 @@ import { trackEvent } from "./contact-link";
 const menu = [
   {
     category: "Mains",
-    name: "Grilled steak",
-    description: "Served with salad and house sauce.",
+    name: "Grilled fish",
+    description: "With plantain, grilled vegetables and pepper sauce.",
     price: "₦12,500",
   },
   {
     category: "Mains",
-    name: "Crisp chicken",
-    description: "Golden chicken with a fresh side salad.",
+    name: "Jollof rice and chicken",
+    description: "Grilled chicken, jollof rice and fried plantain.",
     price: "₦8,500",
   },
   {
@@ -53,10 +53,10 @@ export default function RestaurantDemo() {
       <div className="demo-content">
         <div className="demo-photo">
           <Image
-            src="/images/restaurant-food.webp"
-            alt="Illustrative food photograph with grilled meat, chicken and salad"
+            src="/images/luxa-grilled-fish.webp"
+            alt="Grilled fish with plantain, vegetables, pepper sauce and lime"
             fill
-            sizes="(min-width: 1296px) 570px, (min-width: 640px) 42vw, calc(100vw - 42px)"
+            sizes="(min-width: 640px) 860px, (min-width: 460px) calc(100vw - 42px), 420px"
             className="object-cover"
           />
           <div className="demo-photo-overlay">
