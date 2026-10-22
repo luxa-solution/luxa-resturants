@@ -28,6 +28,21 @@ export default function SiteHeader() {
     };
   }, [open]);
   useEffect(() => {
+    if (!open) return;
+    const body = document.body;
+    const previousOverflow = body.style.overflow;
+    const previousPadding = body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${parseFloat(getComputedStyle(body).paddingRight) + scrollbarWidth}px`;
+    }
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPadding;
+    };
+  }, [open]);
+  useEffect(() => {
     let focusFrame = 0;
     const update = () => {
       const benefits = document.getElementById("why")?.getBoundingClientRect();
@@ -83,7 +98,14 @@ export default function SiteHeader() {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      <header className="site-header home-header dark-surface">
+      <header
+        className="site-header home-header dark-surface"
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+            setOpen(false);
+          }
+        }}
+      >
         <div className="container header-inner">
           <Link href="/" className="wordmark" aria-label="Luxa Web Studio home">
             luxa<span>.</span>
@@ -111,29 +133,39 @@ export default function SiteHeader() {
           </button>
         </div>
         {open && (
-          <nav
-            id="mobile-menu"
-            aria-label="Mobile navigation"
-            className="mobile-nav container"
-            onBlur={(event) => {
-              if (
-                !event.currentTarget.parentElement?.contains(
-                  event.relatedTarget as Node,
-                )
-              )
+          <>
+            <button
+              type="button"
+              className="mobile-menu-backdrop"
+              aria-hidden="true"
+              tabIndex={-1}
+              onClick={() => {
                 setOpen(false);
-            }}
-          >
-            {navItems.map(([label, href]) => (
-              <a key={href} href={href} onClick={() => setOpen(false)}>
-                {label}
-                <ArrowUpRight size={16} />
-              </a>
-            ))}
-            <ContactLink placement="mobile-menu" onClick={() => setOpen(false)}>
-              Discuss my restaurant <ArrowUpRight size={16} />
-            </ContactLink>
-          </nav>
+                toggle.current?.focus();
+              }}
+            />
+            <div className="mobile-menu-panel">
+              <nav
+                id="mobile-menu"
+                aria-label="Mobile navigation"
+                className="mobile-nav container"
+              >
+                {navItems.map(([label, href]) => (
+                  <a key={href} href={href} onClick={() => setOpen(false)}>
+                    {label}
+                    <ArrowUpRight size={16} />
+                  </a>
+                ))}
+                <ContactLink
+                  placement="mobile-menu"
+                  className="mobile-nav-contact"
+                  onClick={() => setOpen(false)}
+                >
+                  Discuss my restaurant <ArrowUpRight size={16} />
+                </ContactLink>
+              </nav>
+            </div>
+          </>
         )}
       </header>
       {showContact && !open && (

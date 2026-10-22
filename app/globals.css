@@ -241,8 +241,18 @@ svg {
   align-items: center;
   justify-content: center;
 }
-.mobile-nav {
+.mobile-nav,
+.mobile-menu-backdrop,
+.mobile-menu-panel {
   display: none;
+}
+@keyframes mobile-menu-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes mobile-menu-panel-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .hero {
   padding-top: 64px;
@@ -1039,17 +1049,56 @@ summary::-webkit-details-marker {
     height: 76px;
     gap: 24px;
   }
+  .home-header .header-inner {
+    position: relative;
+    z-index: 2;
+  }
+  .mobile-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: #100b0870;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    cursor: default;
+    animation: mobile-menu-backdrop-in 160ms ease-out;
+  }
+  .mobile-menu-panel {
+    display: block;
+    position: absolute;
+    top: 100%;
+    inset-inline: 0;
+    z-index: 1;
+    max-height: calc(100dvh - 77px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: linear-gradient(135deg, #27190ef5, #100b08fa);
+    border-bottom: 1px solid #ffffff25;
+    box-shadow: 0 24px 48px #00000030;
+    animation: mobile-menu-panel-in 180ms ease-out;
+  }
   .mobile-nav {
     display: grid;
-    padding-block: 10px 24px;
+    padding-block: 12px 24px;
   }
   .mobile-nav a {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 54px;
     padding-block: 15px;
-    font-size: 14px;
+    font-size: 15px;
     border-top: 1px solid #ffffff20;
+  }
+  .mobile-nav a:first-child {
+    border-top: 0;
+  }
+  .mobile-nav .mobile-nav-contact {
+    color: #ffb06e;
   }
   .hero h1 {
     font-size: 48px;
@@ -2046,6 +2095,9 @@ summary::-webkit-details-marker {
 @media (max-width: 639px) {
   .home-header .header-inner {
     height: 64px;
+  }
+  .mobile-menu-panel {
+    max-height: calc(100dvh - 65px);
   }
   .home-header .header-contact {
     display: none;

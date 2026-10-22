@@ -83,3 +83,9 @@ Font references: [Dancing Script licence](https://github.com/google/fonts/blob/m
 - Final production build and all 34 regression tests passed. Browser checks passed at 320, 390, 768 and 1440 px. No horizontal overflow. Phone payment count-up, reduced motion and contact focus checks passed.
 
 Final screenshots: C:/Users/HP/AppData/Local/Temp/luxa-meals-20261021/final-390-hero.png and final-1440-hero.png. Section captures use the same prefix with demo, scope or contact.
+
+## Mobile navigation overlay
+
+The menu sits above the page under the header, with a dark panel and blurred backdrop. The header and hero keep their size and position. Page scrolling locks while the menu is open; short screens scroll inside the panel. Keyboard, backdrop, section selection and desktop resize close the menu. Closing restores body styles. Reduced motion disables the entrance effects.
+
+Production build and TypeScript checks passed. All 38 tests passed across the full run and a targeted retry of two files after worker startup timeouts. Browser checks passed at 320, 390, 768 and 844 px, including landscape, desktop resize, focus, backdrop dismissal, section navigation and reduced motion. Screenshots: C:/Users/HP/AppData/Local/Temp/luxa-nav-overlay-20261022/.

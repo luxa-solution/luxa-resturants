@@ -36,3 +36,5 @@ Plus Jakarta Sans for body text. Dancing Script 500 for short accents. Licensed 
 Meal photos show premium settings without people. The desktop preview uses corrected jollof rice and chicken. The menu demo uses grilled fish. The contact section has no meal photo. Image prompts and asset paths are in MEAL-IMAGES.md. The rice photo uses a versioned filename to avoid the old image cache.
 
 app/premium-details.css adds fine patterns and warm shading to dark sections. Small interaction effects cover actions, navigation, work cards, FAQs, filters and form fields. Motion respects the reduced-motion setting. Patterns use CSS, with no image or animation dependency.
+
+Mobile navigation opens above the page under the header. A fixed blurred backdrop covers the page. Opening the menu preserves hero geometry and locks page scrolling. Escape, backdrop taps, section selection and focus leaving the header close it. Escape and backdrop taps return focus to the menu button. Short screens scroll inside the menu. Desktop resize closes the menu. Body styles are restored on close and unmount.
