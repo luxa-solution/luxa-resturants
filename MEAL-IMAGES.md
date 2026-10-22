@@ -51,5 +51,3 @@ Subject: one generous grilled fish fillet with crisp golden skin and a moist fla
 Composition/framing: close three-quarter view from slightly above, plate and fish near the center, main food fully recognizable in a central portrait crop. Leave a little shadowed tabletop at the lower edge for a website overlay. Delicate ceramic texture and natural grill marks.
 Lighting/mood: warm soft side light, crisp food detail, gentle dark falloff behind the plate. Refined evening meal, rich but believable colors.
 ```
-
-

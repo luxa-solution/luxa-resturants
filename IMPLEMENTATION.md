@@ -36,17 +36,17 @@ Final production-build measurement, using Lighthouse 13.5.0 and its default mobi
 
 | Check | Result |
 | --- | --- |
-| Performance | 91 |
+| Performance | 90 |
 | Accessibility | 100 |
 | Best practices | 100 |
 | SEO | 100 |
 | Largest Contentful Paint | 3.2 seconds |
 | Cumulative Layout Shift | 0 |
-| Total Blocking Time | 80 milliseconds |
+| Total Blocking Time | 110 milliseconds |
 
 LCP remains above the 2.5-second target. This is a local lab result. It does not establish live Core Web Vitals, real-user INP, full accessibility compliance, or a conversion improvement. Repeat measurements on the deployment and collect field data.
 
-Screenshots and full Lighthouse reports: `C:/Users/HP/AppData/Local/Temp/luxa-refinement-20261021/`. Final report: `lighthouse-final.report.html`. Desktop and phone captures: `desktop.png`, `mobile.png`, and their `-full.png` versions.
+Current screenshots and full Lighthouse reports: `C:/Users/HP/AppData/Local/Temp/luxa-meals-20261021/`. Final report: `lighthouse-final.report.html`. Desktop and phone captures: `final-1440-hero.png` and `final-390-hero.png`. Earlier review captures remain in `luxa-refinement-20261021`.
 
 ## Remaining checks before launch
 
@@ -73,3 +73,13 @@ The fixed phone contact action starts after the service explanation. It hides wh
 Focused browser checks passed for all these changes, including 320 px reflow and reduced motion. Screenshots include mobile.png, mobile-payment.png and share-image.png. The favicon review is in C:/Users/HP/AppData/Local/Temp/luxa-icon-review/preview.png.
 
 Font references: [Dancing Script licence](https://github.com/google/fonts/blob/main/ofl/dancingscript/OFL.txt), [Breathine webfont licensing](https://www.myfonts.com/collections/breathine-font-mjb-letters/).
+
+## Meal photos and surface details
+
+- Added two generated meal images in premium settings. No people, hands or human reflections are visible. The rice was corrected to use thinner, longer grains. MEAL-IMAGES.md records final prompts and asset paths.
+- The desktop opening preview shows jollof rice and chicken. The menu demo shows grilled fish. Demo menu names match the food. The contact photo was removed after user review.
+- The phone opening keeps one action. A responsive picture source avoids a request for the desktop meal photo on phones. Final browser checks confirmed no rice image requests at 320 and 390 px.
+- Dark sections use fine line or dot patterns and subtle warm gradients. These are static CSS backgrounds. Buttons, links, work cards, FAQ summaries, menu filters and form fields have short interaction effects. Reduced motion removes movement and transitions. Keyboard focus remains visible.
+- Final production build and all 34 regression tests passed. Browser checks passed at 320, 390, 768 and 1440 px. No horizontal overflow. Phone payment count-up, reduced motion and contact focus checks passed.
+
+Final screenshots: C:/Users/HP/AppData/Local/Temp/luxa-meals-20261021/final-390-hero.png and final-1440-hero.png. Section captures use the same prefix with demo, scope or contact.

@@ -2039,7 +2039,6 @@ summary::-webkit-details-marker {
     margin-left: auto;
   }
   .hero {
-    min-height: calc(85svh - 64px);
     padding-block: 44px 50px;
   }
   .hero-copy {
