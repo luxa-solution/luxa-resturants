@@ -491,7 +491,7 @@ export default function LuxaHome() {
               Ilorin. Lagos. Abuja.
             </p>
           </div>
-          <div className="footer-links">
+          <nav className="footer-links" aria-label="Footer links">
             <ContactLink placement="footer">
               WhatsApp <ArrowUpRight size={14} />
             </ContactLink>
@@ -502,7 +502,7 @@ export default function LuxaHome() {
               Instagram <ArrowUpRight size={14} />
             </a>
             <Link href="/privacy">Privacy</Link>
-          </div>
+          </nav>
         </div>
         <div className="container footer-bottom">
           <span>

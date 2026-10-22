@@ -1416,23 +1416,38 @@ summary::-webkit-details-marker {
   .form-privacy {
     font-size: 11px;
   }
+  .site-footer {
+    padding-block: 44px max(28px, env(safe-area-inset-bottom));
+  }
   .footer-top {
     flex-direction: column;
-    gap: 24px;
+    gap: 28px;
   }
   .footer-top p {
-    font-size: 11px;
-    margin-top: 15px;
+    font-size: 12px;
+    line-height: 1.8;
+    margin-top: 18px;
   }
   .footer-links {
-    gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 24px;
+    width: 100%;
   }
   .footer-links a {
-    font-size: 11px;
+    justify-content: space-between;
+    min-height: 48px;
+    padding-block: 10px;
+    border-bottom: 1px solid #ffffff20;
+    font-size: 13px;
   }
   .footer-bottom {
-    font-size: 11px;
-    margin-top: 28px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 32px;
   }
   .mobile-contact {
     display: block;
